@@ -110,7 +110,7 @@ function App() {
         formData.append('dataSource', dataSource);
 
         try {
-            const response = await axios.post('http://localhost:5000/run-pca', formData, {
+            const response = await axios.post('https://youyaa.pythonanywhere.com/run-pca', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             console.log("Response from backend:", response.data);
@@ -129,7 +129,7 @@ function App() {
     };
     const testPropStatistic = async (C, sorted_eigenvalues) => {
         try {
-            const response = await axios.post('http://localhost:5000/test-statistic', {
+            const response = await axios.post('https://youyaa.pythonanywhere.com/test-statistic', {
                 principal_components_C: C,
                 sorted_eigenvalues: sorted_eigenvalues,
             });
@@ -501,45 +501,7 @@ function App() {
                     </Form.Group>
                 )}
 
-                {dataSource === 'manual' && numIndividuals > 0 && numVariables > 0 && (
-                    <Form.Group className="initial-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Individual \ Variables</th>
-                                    {Array.from({ length: numVariables }, (_, j) => (
-                                        <th key={j}>
-                                            {manualData.variable_names[j] || `Variable ${j + 1}`}
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {Array.from({ length: numIndividuals }, (_, i) => (
-                                    <tr key={i}>
-                                        <td>
-                                            {manualData.individue_names[i] || `Individual ${i + 1}`}
-                                        </td>
-                                        {Array.from({ length: numVariables }, (_, j) => (
-                                            <td key={j}>
-                                                <Form.Control
-                                                    type="number"
-                                                    value={manualData.data[i]?.[j] || ''}
-                                                    placeholder={`${manualData.variable_names[j] || `Var ${j + 1}`}`}
-                                                    onChange={(e) => {
-                                                        const newData = [...manualData.data];
-                                                        if (!newData[i]) newData[i] = [];
-                                                        newData[i][j] = e.target.value === '' ? '' : parseFloat(e.target.value);
-                                                        setManualData({ ...manualData, data: newData });
-                                                    }}
-                                                />
-                                            </td>
-                                        ))}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </Form.Group>
+{dataSource === 'manual' && numIndividuals > 0 && numVariables > 0 && (
                     // <Form.Group className="initial-table">
                     //     <table>
                     //         <thead>
@@ -547,45 +509,27 @@ function App() {
                     //                 <th>Individual \ Variables</th>
                     //                 {Array.from({ length: numVariables }, (_, j) => (
                     //                     <th key={j}>
-                    //                         {/* <Form.Control
-                    //                             type="text"
-                    //                             // placeholder={`Variable ${j + 1}`}
-                    //                             // onChange={(e) => {
-                    //                             //     const newVariableNames = [...manualData.variable_names];
-                    //                             //     newVariableNames[j] = e.target.value;
-                    //                             //     setManualData({ ...manualData, variable_names: newVariableNames });
-                    //                             // }}
-                    //                         /> */}
-                    //                         {`Variable ${j + 1}`}
+                    //                         {manualData.variable_names[j] || `Variable ${j + 1}`}
                     //                     </th>
                     //                 ))}
                     //             </tr>
                     //         </thead>
                     //         <tbody>
-
                     //             {Array.from({ length: numIndividuals }, (_, i) => (
                     //                 <tr key={i}>
                     //                     <td>
-                    //                         {/* <Form.Control
-                    //                             type="text"
-                    //                             placeholder={`Individual ${i + 1}`}
-                    //                             onChange={(e) => {
-                    //                                 const newNames = [...manualData.individue_names];
-                    //                                 newNames[i] = e.target.value;
-                    //                                 setManualData({ ...manualData, individue_names: newNames });
-                    //                             }}
-                    //                         /> */}
-                    //                         {`Individual ${i + 1}`}
+                    //                         {manualData.individue_names[i] || `Individual ${i + 1}`}
                     //                     </td>
                     //                     {Array.from({ length: numVariables }, (_, j) => (
                     //                         <td key={j}>
                     //                             <Form.Control
                     //                                 type="number"
-                    //                                 placeholder={`Value for ${manualData.variable_names[j] || `Variable ${j + 1}`}`}
+                    //                                 value={manualData.data[i]?.[j] || ''}
+                    //                                 placeholder={`${manualData.variable_names[j] || `Var ${j + 1}`}`}
                     //                                 onChange={(e) => {
                     //                                     const newData = [...manualData.data];
                     //                                     if (!newData[i]) newData[i] = [];
-                    //                                     newData[i][j] = parseFloat(e.target.value);
+                    //                                     newData[i][j] = e.target.value === '' ? '' : parseFloat(e.target.value);
                     //                                     setManualData({ ...manualData, data: newData });
                     //                                 }}
                     //                             />
@@ -596,8 +540,65 @@ function App() {
                     //         </tbody>
                     //     </table>
                     // </Form.Group>
-                )}
 
+
+                    <Form.Group className="initial-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Individual \ Variables</th>
+                                    {Array.from({ length: numVariables }, (_, j) => (
+                                        <th key={j}>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder={`Variable ${j + 1}`}
+                                                onChange={(e) => {
+                                                    const newVariableNames = [...manualData.variable_names];
+                                                    newVariableNames[j] = e.target.value;
+                                                    setManualData({ ...manualData, variable_names: newVariableNames });
+                                                }}
+                                            />
+                                            {/*`Variable ${j + 1}`*/}
+                                        </th>
+                                    ))}
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                {Array.from({ length: numIndividuals }, (_, i) => (
+                                    <tr key={i}>
+                                        <td>
+                                            <Form.Control
+                                                type="text"
+                                                placeholder={`Individual ${i + 1}`}
+                                                onChange={(e) => {
+                                                    const newNames = [...manualData.individue_names];
+                                                    newNames[i] = e.target.value;
+                                                    setManualData({ ...manualData, individue_names: newNames });
+                                                }}
+                                            />
+                                            {/*`Individual ${i + 1}`*/}
+                                        </td>
+                                        {Array.from({ length: numVariables }, (_, j) => (
+                                            <td key={j}>
+                                                <Form.Control
+                                                    type="number"
+                                                    placeholder={`Value for ${manualData.variable_names[j] || `Variable ${j + 1}`}`}
+                                                    onChange={(e) => {
+                                                        const newData = [...manualData.data];
+                                                        if (!newData[i]) newData[i] = [];
+                                                        newData[i][j] = parseFloat(e.target.value);
+                                                        setManualData({ ...manualData, data: newData });
+                                                    }}
+                                                />
+                                            </td>
+                                        ))}
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </Form.Group>
+                )}
 
                 <Form.Group className="pca-type">
                     <Form.Label className='title'>Select PCA Type</Form.Label>
