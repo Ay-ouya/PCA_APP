@@ -80,13 +80,6 @@ function App() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Form data:", {
-        dataSource,
-        file,
-        datasetUrl,
-        manualData,
-        pcaType,
-    });
 
         if (dataSource === 'file' && !file) {
             alert('Please upload a file first!');
