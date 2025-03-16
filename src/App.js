@@ -110,7 +110,7 @@ function App() {
         formData.append('dataSource', dataSource);
 
         try {
-            const response = await axios.post('https://youyaa.pythonanywhere.com/run-pca', formData, {
+            const response = await axios.post('http://localhost:5000/run-pca', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             console.log("Response from backend:", response.data);
@@ -129,7 +129,7 @@ function App() {
     };
     const testPropStatistic = async (C, sorted_eigenvalues) => {
         try {
-            const response = await axios.post('https://youyaa.pythonanywhere.com/test-statistic', {
+            const response = await axios.post('http://localhost:5000/test-statistic', {
                 principal_components_C: C,
                 sorted_eigenvalues: sorted_eigenvalues,
             });
@@ -435,7 +435,7 @@ function App() {
     
     return (
         <Container className="App">
-            <h1>Principal Component Analysis (PCA)</h1>
+            <h1>Principal Component Analysis <img src="/pca.png" alt="pca logo" /></h1>
             <Form onSubmit={handleSubmit}>
                 <Form.Group className="radio-buttons">
                     <Form.Label className='title'>Select Data Source</Form.Label>
