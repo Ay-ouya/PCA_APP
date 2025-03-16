@@ -1,19 +1,20 @@
 :root {
-  --primary-color: rgb(59, 141, 156);
-  --secondary-color: rgb(64, 193, 197);
-  --hover-color: rgb(90, 167, 193);
-  --active-color: rgb(55, 131, 157);
-  --border-radius: 8px;
+  --primary-color: #2c3e50; /* Dark blue for primary elements */
+  --secondary-color: #3498db; /* Bright blue for secondary elements */
+  --accent-color: #e74c3c; /* Red for accents */
+  --background-color: #ecf0f1; /* Light gray for background */
+  --text-color: #2c3e50; /* Dark blue for text */
+  --hover-color: #2980b9; /* Darker blue for hover states */
+  --active-color: #1abc9c; /* Teal for active states */
+  --border-radius: 12px;
   --transition-speed: 0.3s;
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 
 body {
   font-family: 'Roboto', sans-serif;
-  background-image: linear-gradient(150deg,
-      rgb(166, 245, 252),
-      rgb(59, 141, 156));
-  color: #333;
+  background-color: var(--background-color);
+  color: var(--text-color);
   min-height: 100vh;
   margin: 0;
   display: flex;
@@ -21,23 +22,27 @@ body {
   align-items: center;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif;
-  color: #2c3e50;
+  color: var(--primary-color);
 }
 
 h1 {
   font-size: 2.5rem;
   font-weight: 700;
-  margin-bottom: 1.5rem;
   text-align: center;
-  color: #3d868f;
-  text-shadow: 1px 2px 2px #324b4e;
+  color: var(--secondary-color);
+  text-shadow: 2px 3px 5px rgba(0, 0, 0, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+h1 img {
+  width: 250px;
+  height: 250px;
+  object-fit: contain;
 }
 
 h2 {
@@ -45,7 +50,7 @@ h2 {
   font-weight: 600;
   margin-top: 2rem;
   margin-bottom: 1rem;
-  color: #2c3e50;
+  color: var(--primary-color);
   text-align: center;
 }
 
@@ -54,15 +59,14 @@ h3 {
   font-weight: 500;
   margin-top: 1.5rem;
   margin-bottom: 1rem;
-  color: #34495e;
+  color: var(--primary-color);
 }
 
 p {
   font-size: 1rem;
   line-height: 1.6;
-  color: #555;
+  color: var(--text-color);
 }
-
 
 .App {
   width: 97%;
@@ -70,32 +74,33 @@ p {
   max-width: 1200px;
   margin: 1rem auto;
   padding: 2rem;
-  background-color: #ffffff41;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.785);
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
   overflow-y: auto;
 }
 
-/************* RADIO BUTTON *******************/
+/* Radio Buttons */
 .radio-buttons .title {
   margin-right: 20px;
-  color: var(--active-color);
+  color: var(--primary-color);
   font-size: 1.1rem;
   font-weight: 600;
 }
 
 .radio-buttons {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
   padding: 20px;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
+  background-color: #fff;
+  box-shadow: var(--box-shadow);
 }
 
 .form-check-label {
   padding-right: 20px;
-  align-items: center;
-  width: 10em;
-  color: #1c5980;
+  color: var(--primary-color);
   font-weight: 400;
 }
 
@@ -104,50 +109,49 @@ p {
   position: absolute;
 }
 
-.form-check-input+.form-check-label::before {
+.form-check-input + .form-check-label::before {
   content: "";
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid #ffffff;
+  border: 2px solid var(--secondary-color);
   border-radius: 50%;
   margin-right: 8px;
   vertical-align: middle;
 }
 
-.form-check-input:checked+.form-check-label::before {
-  background-color: rgb(166, 245, 252);
-  border-color: #ffffff;
+.form-check-input:checked + .form-check-label::before {
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
 }
 
-.form-check-input:checked+.form-check-label::after {
+.form-check-input:checked + .form-check-label::after {
   content: "";
   display: inline-block;
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: white;
+  background: #fff;
   position: absolute;
   left: 4px;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.form-check-input:checked+label {
-  font-weight: bold;
-}
-
-/***********************************************/
-.upload,
-.insert {
+/* Upload and Insert Sections */
+.upload, .insert {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 400px;
+  max-width: 100%;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
-.upload .title {
+.upload .title, .insert .title {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--primary-color);
@@ -163,8 +167,8 @@ p {
   font-size: 1rem;
   font-weight: 500;
   color: #fff;
-  background-color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  background-color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   text-align: center;
@@ -180,18 +184,12 @@ p {
   transform: scale(0.98);
 }
 
-.upload .FILE {
-  margin-top: 10px;
-  font-size: 0.9rem;
-  color: var(--secondary-color);
-}
-
 .upload .url {
   padding: 10px 15px;
   font-size: 1rem;
-  color: var(--secondary-color);
+  color: var(--primary-color);
   background-color: #fff;
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--secondary-color);
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
@@ -202,8 +200,8 @@ p {
 
 .upload .url:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
 }
 
 .upload .url::placeholder {
@@ -211,29 +209,13 @@ p {
   font-style: italic;
 }
 
-.insert {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1rem;
-  align-items: center;
-  margin-bottom: 5%;
-  margin-top: 5%;
-}
-
-.insert .title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--primary-color);
-  margin-bottom: 5px;
-}
-
 .insert .form-control {
-  width: 50px;
+  width: 100%;
   padding: 10px 15px;
   font-size: 1rem;
-  color: var(--secondary-color);
+  color: var(--primary-color);
   background-color: #fff;
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--secondary-color);
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
@@ -244,44 +226,35 @@ p {
 
 .insert .form-control:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
 }
 
-.insert .form-control[type="number"]::-webkit-inner-spin-button,
-.insert .form-control[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.insert .form-control[type="number"]::-webkit-outer-spin-button,
-.insert .form-control[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/*************************************************************/
+/* PCA Type Selector */
 .pca-type {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  max-width: 400px;
+  max-width: 100%;
   margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 .pca-type .title {
   font-size: 1.1rem;
   font-weight: 600;
   color: var(--primary-color);
-  margin-top: 10%;
 }
 
 .pca-type .options {
   padding: 10px 15px;
   font-size: 1rem;
-  color: var(--secondary-color);
+  color: var(--primary-color);
   background-color: #fff;
-  border: 2px solid var(--primary-color);
+  border: 2px solid var(--secondary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
@@ -293,33 +266,24 @@ p {
 
 .pca-type .options:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.25);
 }
 
-.pca-type .options {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 12px;
-}
-
-/**************************************************************/
+/* Run Button */
 .run-button-container {
   display: flex;
-  justify-content: flex-start;
-  text-align: left;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 button {
-  margin-top: 10%;
   padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
   color: #fff;
-  background-color: var(--primary-color);
-  border: 2px solid var(--primary-color);
+  background-color: var(--secondary-color);
+  border: 2px solid var(--secondary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, transform var(--transition-speed) ease;
@@ -336,120 +300,84 @@ button:active {
   transform: scale(0.98);
 }
 
-/*******************************************************************************/
+/* Initial Table */
 .initial-table {
   width: 100%;
-  overflow-x: auto; 
+  overflow-x: auto;
+  margin: 20px 0;
 }
+
 .initial-table table {
   width: 100%;
-  border-collapse: collapse; 
+  border-collapse: collapse;
   background-color: #fff;
-  border-radius: 8px;
-  overflow: hidden; 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
-.initial-table th,
-.initial-table td {
-  padding: 12px 15px; 
+
+.initial-table th, .initial-table td {
+  padding: 12px 15px;
   text-align: center;
   border-bottom: 1px solid #eee;
 }
+
 .initial-table thead th {
   background-color: #f8f9fa;
   font-weight: 600;
-  color: #333;
+  color: var(--primary-color);
   text-transform: uppercase;
   font-size: 0.9rem;
 }
+
 .initial-table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
+
 .initial-table tbody tr:hover {
   background-color: #f5f5f5;
   transition: background-color 0.2s ease;
 }
+
 .initial-table .form-control {
-  width: 100px; 
+  width: 100px;
   padding: 6px 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 0.9rem;
 }
-.initial-table td:first-child,
-.initial-table th:first-child {
+
+.initial-table td:first-child, .initial-table th:first-child {
   font-weight: 500;
   background-color: #fafafa;
   position: sticky;
-  left: 0; 
+  left: 0;
 }
 
-/******************************************************************************/
+/* Matrix and Plot Containers */
 .matrix-container {
   margin: 1rem 0;
   padding: 1rem;
   background-color: #f8f9fa;
-  border-radius: 5px;
+  border-radius: var(--border-radius);
   border: 1px solid #ddd;
-}
-
-.matrix-row {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 0.5rem;
-}
-
-.matrix-value {
-  margin: 0 5px;
-  min-width: 30px;
-  text-align: center;
-  font-family: 'Courier New', monospace;
-  font-size: 1rem;
-  color: #333;
 }
 
 .plot-container {
   padding: 15px;
-  /* width: 50px; */
   margin: 2rem 0;
-  /* padding: 1rem; */
   background-color: #fff;
-  /* border-radius: 10em 10em 0em 10em; */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow);
 }
-.correlation-row {
-  max-width: 1200px;
-  width: 100%;
-}
-.correlation-col {
-  margin-bottom: 30px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.correlation-col h4 {
-  text-align: center;
-  color: #333;
-  font-family: Arial, sans-serif;
-  margin-bottom: 15px;
-}
-.plot-wrapper {
-  background: #f9f9f9;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  width: 100%;
-  max-width: 500px;
-}
+
 .correlation-circle-container {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
   padding: 20px;
   background: #f5f5f5;
 }
 
+/* Responsive Design */
 @media (max-width: 768px) {
   h1 {
     font-size: 2rem;
@@ -463,63 +391,35 @@ button:active {
     font-size: 1.5rem;
   }
 
-  .container {
+  .App {
     padding: 1rem;
   }
 
-  .btn-primary {
+  .radio-buttons {
+    flex-direction: column;
+  }
+
+  .upload, .insert, .pca-type {
+    padding: 15px;
+  }
+
+  .upload .custom-file-upload, .upload .url, .insert .form-control, .pca-type .options {
     width: 100%;
   }
 
-  .pca-type {
-    max-width: 100%;
-  }
-
-  .pca-type .title {
-    font-size: 1rem;
-  }
-
-  .pca-type .options {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-
-  .upload {
-    max-width: 100%;
-  }
-
-  .upload .title {
-    font-size: 1rem;
-  }
-
-  .upload .url {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-
-  .insert {
-    max-width: 100%;
-  }
-
-  .insert .title {
-    font-size: 1rem;
-  }
-
-  .insert .form-control {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-
-  .run-button {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-  }
   .initial-table .form-control {
     width: 80px;
   }
-  
-  .initial-table th,
-  .initial-table td {
+
+  .initial-table th, .initial-table td {
     padding: 8px 10px;
+  }
+
+  .run-button-container {
+    justify-content: center;
+  }
+
+  button {
+    width: 100%;
   }
 }
