@@ -503,6 +503,7 @@ button:active {
   font-weight: 500;
   background-color: var(--secondary-color);
   color: var(--primary-color);
+  position: -webkit-sticky;
   position: sticky;
   left: 0;
   max-width: 80px;
