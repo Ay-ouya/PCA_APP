@@ -1,0 +1,242 @@
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.3rem;
+    }
+
+    h3 {
+        font-size: 1rem;
+    }
+
+    p {
+        font-size: 0.8rem;
+    }
+
+    .App {
+        padding: 5px;
+        overflow-x: hidden;
+    }
+
+    .App-header {
+        padding: 0.5rem;
+    }
+
+    .radio-buttons {
+        font-size: 0.85rem;
+        margin-left: 0;
+        padding: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .radio-buttons .title {
+        margin-right: 0;
+        margin-bottom: 10px;
+        font-size: 0.9rem;
+    }
+
+    .form-check-label {
+        width: 100%;
+        padding-right: 0;
+        margin-bottom: 5px;
+    }
+
+    .pca-type {
+        margin: 0 auto;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+
+    .type-select {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .pca-type .title,
+    .type-select .title,
+    .criteria-selection .title {
+        font-size: 0.9rem;
+        padding: 5px 0;
+    }
+
+    .type-select .custom-dropdown {
+        min-width: 100%;
+        max-width: 300px;
+    }
+
+    .pca-type .dropdown-toggle {
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+
+    .type-select .dropdown-menu {
+        width: 100%;
+    }
+
+    .type-select .dropdown-option {
+        padding: 8px;
+        font-size: 0.8rem;
+    }
+
+    .criteria-selection {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 10px;
+    }
+
+    .criteria-options {
+        flex-direction: row;
+        gap: 10px;
+        width: 100%;
+    }
+
+    .custom-check .form-check-label {
+        font-size: 0.9rem;
+    }
+
+    /***********************************************/
+    .upload,
+    .insert {
+        padding: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .upload .title,
+    .insert .title {
+        font-size: 0.9rem;
+        padding: 5px 0;
+    }
+
+    .upload .custom-file-upload,
+    .upload .url,
+    .insert .form-control {
+        max-width: 300px;
+        font-size: 0.9rem;
+    }
+
+    .upload .fileName {
+        font-size: 0.8rem;
+        margin-top: 5px;
+    }
+
+    /********************** TABLE *************************/
+    .initial-table {
+        overflow-x: auto;
+        width: 100%;
+        display: block;
+    }
+
+    .initial-table table {
+        font-size: 0.8rem;
+    }
+
+    .initial-table th,
+    .initial-table td {
+        padding: 5px;
+    }
+
+    .initial-table .form-control {
+        font-size: 0.8rem;
+        padding: 5px;
+    }
+
+    .run-button-container {
+        justify-content: center;
+        padding: 10px;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+
+    .main-content {
+        margin: 0;
+    }
+
+    .description {
+        max-width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+    }
+
+    .calculated-result {
+        padding: 5px;
+        overflow-x: auto;
+    }
+
+    .Steps-normed-pca,
+    .Steps-non-normed-pca {
+        grid-template-columns: 1fr;
+    }
+
+    .visual {
+        grid-column: span 1;
+    }
+
+    .math {
+        font-size: 0.8rem;
+        white-space: normal;
+        overflow-x: auto;
+    }
+
+    .matrix-container {
+        padding: 0.5rem;
+        justify-content: flex-start;
+    }
+
+    .renderMatrix {
+        font-size: 0.8rem;
+    }
+
+    .test {
+        margin: 15px;
+        grid-template-columns: 1fr;
+    }
+
+    .plot-cont {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .plot-container {
+        width: max-content;
+    }
+
+    .plot-wrap {
+        width: 100%;
+        min-width: 300px;
+        max-width: 100%;
+    }
+
+    .plot-wrapper {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .correlation-col {
+        margin-bottom: 20px;
+    }
+
+    .correlation-row {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .correlation-col h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .correlation-circle-container {
+        flex-direction: column;
+        padding: 20px 0;
+    }
+}
