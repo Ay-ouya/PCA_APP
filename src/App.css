@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #3B82F6; /* Main blue for buttons, headers */
-  --other-primary-color: #1E3A8A; /* Darker blue for secondary elements */
-  --darker-primary-color: #0F172A; /* Deep navy for main background */
-  --main-text-color: #F1F5F9; /* Off-white for primary text */
-  --secondary-color: #FBBF24; /* Warm yellow-orange for highlights */
-  --secondary-lighter-color: #FEF3C7; /* Light yellow for subtle backgrounds */
-  --hover-color: #F59E0B; /* Darker yellow-orange for hover states */
-  --accent-color: #2DD4BF; /* Teal for accents */
+  --primary-color: #60A5FA; /* Soft blue for buttons, headers */
+  --other-primary-color: #E0F2FE; /* Light gray-blue for secondary backgrounds */
+  --darker-primary-color: #FFFFFF; /* White for main background */
+  --main-text-color: #1E293B; /* Dark slate for primary text */
+  --secondary-color: #FF8787; /* Soft coral for highlights */
+  --secondary-lighter-color: #FFF1F1; /* Very light peach for subtle backgrounds */
+  --hover-color: #F87171; /* Darker coral for hover states */
+  --accent-color: #5EEAD4; /* Muted teal for accents */
   --border-radius: 8px;
   --transition-speed: 0.3s;
 }
@@ -39,8 +39,8 @@ h1 {
   margin: 0;
   padding: 10px 0;
   text-align: center;
-  color: var(--main-text-color);
-  text-shadow: 1px 2px 2px #1E3A8A; /* Updated to match the darker blue */
+  color: var(--primary-color); /* Use the soft blue for the main header */
+  text-shadow: 1px 2px 2px rgba(96, 165, 250, 0.2); /* Subtle shadow matching the primary color */
 }
 
 h2 {
@@ -61,7 +61,7 @@ h3 {
 p {
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--main-text-color); /* Ensure paragraphs are readable */
+  color: var(--main-text-color);
 }
 
 .App {
@@ -107,7 +107,7 @@ p {
   padding-right: 20px;
   align-items: center;
   width: 10em;
-  color: var(--main-text-color); /* Off-white for readability */
+  color: var(--main-text-color);
   font-weight: 400;
 }
 
@@ -122,7 +122,7 @@ p {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid var(--primary-color); /* Blue border */
+  border: 2px solid var(--primary-color);
   border-radius: 50%;
   margin-right: 8px;
   vertical-align: middle;
@@ -132,12 +132,12 @@ p {
 }
 
 .form-check-input:checked+.form-check-label::before {
-  background-color: var(--secondary-color); /* Yellow-orange when checked */
+  background-color: var(--secondary-color); /* Coral when checked */
   border-color: var(--primary-color);
 }
 
 .form-check-label:hover::before {
-  border-color: var(--hover-color); /* Darker yellow-orange on hover */
+  border-color: var(--hover-color); /* Darker coral on hover */
 }
 
 .form-check-input:checked+.form-check-label::after {
@@ -186,8 +186,8 @@ p {
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--primary-color); /* Blue text */
-  border: 2px solid var(--primary-color); /* Blue border */
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   text-align: center;
@@ -195,8 +195,8 @@ p {
 }
 
 .upload .custom-file-upload:hover {
-  background-color: var(--secondary-color); /* Yellow-orange background on hover */
-  color: var(--darker-primary-color); /* Dark navy text */
+  background-color: var(--secondary-color);
+  color: var(--darker-primary-color);
 }
 
 .upload .custom-file-upload:active {
@@ -213,23 +213,19 @@ p {
   padding: 10px 15px;
   font-size: 1rem;
   color: var(--main-text-color);
-  background-color: var(--other-primary-color); /* Darker blue background */
-  border: 2px solid var(--primary-color); /* Blue border */
+  background-color: var(--darker-primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
 .upload .url:focus {
   outline: none;
-  border-color: var(--secondary-color); /* Yellow-orange border on focus */
-}
-
-.upload .url .form-control[type="text"] {
-  background-color: red; /* This seems like a placeholder; consider removing or updating */
+  border-color: var(--secondary-color);
 }
 
 .upload .url::placeholder {
-  color: #f6e2a672;
+  color: #94A3B8; /* Light slate for placeholder */
   font-style: italic;
 }
 
@@ -252,8 +248,8 @@ p {
   padding: 10px 15px;
   font-size: 1rem;
   color: var(--main-text-color);
-  background-color: var(--other-primary-color); /* Darker blue background */
-  border: 2px solid var(--primary-color); /* Blue border */
+  background-color: var(--darker-primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
@@ -264,7 +260,7 @@ p {
 
 .insert .form-control:focus {
   outline: none;
-  border-color: var(--secondary-color); /* Yellow-orange border on focus */
+  border-color: var(--secondary-color);
 }
 
 .insert .form-control[type="number"]::-webkit-inner-spin-button,
@@ -309,7 +305,7 @@ p {
   padding: 10px 15px;
   font-size: 1rem;
   color: var(--main-text-color);
-  background-color: var(--other-primary-color);
+  background-color: var(--darker-primary-color);
   border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -322,7 +318,7 @@ p {
 
 .type-select .dropdown-toggle:hover {
   border-color: var(--secondary-color);
-  box-shadow: 0 0 0 3px var(--accent-color); /* Teal shadow on hover */
+  box-shadow: 0 0 0 3px var(--accent-color);
 }
 
 .type-select .dropdown-menu {
@@ -330,7 +326,7 @@ p {
   top: 100%;
   left: 0;
   right: 0;
-  background-color: var(--other-primary-color);
+  background-color: var(--darker-primary-color);
   border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   z-index: 1000;
@@ -415,7 +411,7 @@ button {
   font-size: 1rem;
   size: 36px;
   font-weight: 600;
-  color: #fff;
+  color: var(--darker-primary-color);
   background-color: var(--primary-color);
   border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
@@ -507,7 +503,7 @@ button:active {
   font-size: 1rem;
   font-weight: bolder;
   text-align: center;
-  color: var(--darker-primary-color);
+  color: var(--main-text-color);
   background-color: var(--secondary-lighter-color);
   border: none;
   width: 60px;
@@ -562,7 +558,7 @@ button:active {
   font-style: italic;
   font-weight: bold;
   margin: 0 5px;
-  color: var(--secondary-color); /* Highlight with yellow-orange */
+  color: var(--secondary-color); /* Highlight with coral */
 }
 
 .nonN {
@@ -635,7 +631,7 @@ button:active {
 
 /****************************** PLOTS ************************************************/
 .plot-container {
-  background-color: #2A4365; /* Slightly lighter than the darker blue */
+  background-color: var(--darker-primary-color);
   border-radius: var(--border-radius);
 }
 
@@ -665,13 +661,13 @@ button:active {
 
 .correlation-col h4 {
   text-align: center;
-  color: var(--main-text-color); /* Updated to off-white for readability */
+  color: var(--main-text-color);
   font-family: 'Times New Roman';
   margin-bottom: 15px;
 }
 
 .plot-wrapper {
-  background: #2A4365;
+  background: var(--darker-primary-color);
   border-radius: 8px;
   width: 100%;
   max-width: 500px;
