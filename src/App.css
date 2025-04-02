@@ -1,15 +1,14 @@
 :root {
-  --primary-color: #4F46E5; /* Deep indigo for buttons, headers */
-  --other-primary-color: #EDE9FE; /* Soft lavender for secondary backgrounds */
-  --darker-primary-color: #F9FAFB; /* Very light gray for main background */
-  --main-text-color: #111827; /* Dark charcoal for primary text */
-  --secondary-color: #FF6B6B; /* Vibrant coral for highlights */
-  --secondary-lighter-color: #FFE4E4; /* Pale blush for subtle backgrounds */
-  --hover-color: #F43F5E; /* Deeper coral for hover states */
-  --accent-color: #22D3EE; /* Bright cyan for accents */
+  --primary-color: #60A5FA; /* Soft blue for buttons, headers */
+  --other-primary-color: #E0F2FE; /* Light gray-blue for secondary backgrounds */
+  --darker-primary-color: #FFFFFF; /* White for main background */
+  --main-text-color: #1E293B; /* Dark slate for primary text */
+  --secondary-color: #FF8787; /* Soft coral for highlights */
+  --secondary-lighter-color: #FFF1F1; /* Very light peach for subtle backgrounds */
+  --hover-color: #F87171; /* Darker coral for hover states */
+  --accent-color: #58dac6; /* Muted teal for accents */
   --border-radius: 8px;
   --transition-speed: 0.3s;
-  --gradient: linear-gradient(45deg, #4F46E5, #22D3EE); /* Gradient for buttons and headers */
 }
 
 body {
@@ -40,10 +39,8 @@ h1 {
   margin: 0;
   padding: 10px 0;
   text-align: center;
-  background: var(--gradient); /* Gradient background for h1 */
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 1px 2px 2px rgba(79, 70, 229, 0.2); /* Subtle shadow matching the primary color */
+  color: var(--primary-color); /* Use the soft blue for the main header */
+  text-shadow: 1px 2px 2px rgba(96, 165, 250, 0.2); /* Subtle shadow matching the primary color */
 }
 
 h2 {
@@ -79,7 +76,7 @@ p {
 .App-header {
   padding: 1rem;
   text-align: center;
-  background: var(--gradient); /* Gradient background for header */
+  background-color: var(--other-primary-color);
   border-bottom: 2px solid var(--primary-color);
 }
 
@@ -140,7 +137,7 @@ p {
 }
 
 .form-check-label:hover::before {
-  border-color: var(--hover-color); /* Deeper coral on hover */
+  border-color: var(--hover-color); /* Darker coral on hover */
 }
 
 .form-check-input:checked+.form-check-label::after {
@@ -185,21 +182,21 @@ p {
 
 .upload .custom-file-upload {
   display: inline-block;
+  size: 36px;
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: 500;
-  color: #FFFFFF; /* White text for contrast */
-  background: var(--gradient); /* Gradient background for button */
-  border: 2px solid transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   text-align: center;
-  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
 }
 
 .upload .custom-file-upload:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(79, 70, 229, 0.3); /* Subtle glow on hover */
+  background-color: var(--secondary-color);
+  color: var(--darker-primary-color);
 }
 
 .upload .custom-file-upload:active {
@@ -225,11 +222,10 @@ p {
 .upload .url:focus {
   outline: none;
   border-color: var(--secondary-color);
-  box-shadow: 0 0 5px rgba(255, 107, 107, 0.3); /* Subtle glow on focus */
 }
 
 .upload .url::placeholder {
-  color: #6B7280; /* Neutral gray for placeholder */
+  color: #94A3B8; /* Light slate for placeholder */
   font-style: italic;
 }
 
@@ -265,7 +261,6 @@ p {
 .insert .form-control:focus {
   outline: none;
   border-color: var(--secondary-color);
-  box-shadow: 0 0 5px rgba(255, 107, 107, 0.3);
 }
 
 .insert .form-control[type="number"]::-webkit-inner-spin-button,
@@ -414,21 +409,24 @@ p {
 button {
   padding: 12px 24px;
   font-size: 1rem;
+  size: 36px;
   font-weight: 600;
-  color: #FFFFFF; /* White text for contrast */
-  background: var(--gradient); /* Gradient background for buttons */
-  border: 2px solid transparent;
+  color: var(--darker-primary-color);
+  background-color: var(--primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
-  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+  transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, transform var(--transition-speed) ease;
 }
 
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 10px rgba(79, 70, 229, 0.3);
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
 }
 
 button:active {
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
   transform: scale(0.98);
 }
 
@@ -440,7 +438,7 @@ button:active {
 }
 
 .test-statistic {
-  background: var(--gradient);
+  background-color: var(--primary-color);
   text-decoration: underline;
 }
 
@@ -547,7 +545,6 @@ button:active {
   border-radius: 10px;
   background-color: var(--other-primary-color);
   padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
 }
 
 .pca-types-names {
@@ -568,7 +565,7 @@ button:active {
   font-style: italic;
   font-weight: bold;
   margin: 0 5px;
-  color: var(--accent-color); /* Highlight with cyan */
+  color: var(--accent-color); /* Highlight with teal */
 }
 
 /******************************************************************************/
@@ -577,9 +574,8 @@ button:active {
   border-radius: var(--border-radius);
   margin: 10px auto;
   max-width: 1200px;
-  padding: 15px;
+  padding: 5px;
   overflow-x: auto;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .Steps-normed-pca,
@@ -596,7 +592,7 @@ button:active {
 }
 
 .math {
-  color: var(--accent-color); /* Cyan for math equations */
+  color: var(--accent-color); /* Teal for math equations */
   margin-bottom: 10px;
   max-width: 100%;
   white-space: nowrap;
@@ -621,8 +617,6 @@ button:active {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--darker-primary-color);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .renderMatrix {
@@ -639,24 +633,18 @@ button:active {
 .plot-container {
   background-color: var(--darker-primary-color);
   border-radius: var(--border-radius);
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .plot-cont {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  gap: 15px;
+  gap: 5px;
 }
 
 .plot-wrap {
   width: 40%;
   min-width: 400px;
-  background-color: var(--darker-primary-color);
-  border-radius: var(--border-radius);
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .correlation-row {
@@ -697,5 +685,4 @@ button:active {
 .stat {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
 }
