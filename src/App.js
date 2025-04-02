@@ -495,8 +495,6 @@ function App() {
                     ) : (
                         <>
                             <div className='inputed-matrix'>
-                                <p><center>The inputed data :</center>
-                                </p>
                                 {pcaType === 'Normed_PCA' && renderMatrix(result.input_matrix_X, 'A')}
                                 {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && 
                                     renderMatrix(result2.Inputed_Data, 'A')}
