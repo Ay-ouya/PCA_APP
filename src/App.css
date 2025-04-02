@@ -645,6 +645,16 @@ button:active {
 .plot-wrap {
   width: 40%;
   min-width: 400px;
+  background-color: var(--darker-primary-color);
+  border-radius: var(--border-radius);
+  padding: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.plot-wrap:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .correlation-row {
