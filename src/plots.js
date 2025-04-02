@@ -41,16 +41,13 @@ export function PairwiseComponentsPlot({ principalComponents, individueNames }) 
                   line: { color: '#1E293B', width: 1 }, // Dark slate outline
                 },
                 textposition: 'top center',
-                textfont: { color: '#1E293B', size: 12 }, // Smaller font size to reduce overlap
+                textfont: { color: '#1E293B', size: 12 },
                 hoverinfo: 'text',
                 hovertemplate: '%{text}<br>(%{x:.2f}, %{y:.2f})<extra></extra>',
               },
             ]}
             layout={{
-              title: {
-                text: `U${x + 1} vs U${y + 1}`,
-                font: { color: '#1E293B', size: 16 },
-              },
+              // Removed the title property to avoid double naming
               xaxis: {
                 title: { text: `U${x + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
@@ -59,7 +56,7 @@ export function PairwiseComponentsPlot({ principalComponents, individueNames }) 
                 showgrid: true,
                 gridcolor: '#58DAC6',
                 tickfont: { color: '#1E293B' },
-                automargin: true, // Automatically adjust margins to prevent cutoff
+                automargin: true,
               },
               yaxis: {
                 title: { text: `U${y + 1}`, font: { color: '#1E293B' } },
@@ -69,17 +66,17 @@ export function PairwiseComponentsPlot({ principalComponents, individueNames }) 
                 showgrid: true,
                 gridcolor: '#58DAC6',
                 tickfont: { color: '#1E293B' },
-                automargin: true, // Automatically adjust margins to prevent cutoff
+                automargin: true,
               },
               showlegend: false,
               paper_bgcolor: 'rgba(0,0,0,0)',
               plot_bgcolor: 'rgba(0,0,0,0)',
               font: { color: '#1E293B' },
-              margin: { t: 50, b: 50, l: 50, r: 50 },
+              margin: { t: 30, b: 50, l: 50, r: 50 }, // Reduced top margin since there's no Plotly title
               hovermode: 'closest',
-              autosize: true, // Ensure the plot resizes dynamically
+              autosize: true,
             }}
-            style={{ width: '100%', height: '400px' }} // Set a fixed height for consistency
+            style={{ width: '100%', height: '400px' }}
             config={{ responsive: true }}
           />
         </div>
@@ -124,23 +121,20 @@ export function CorrelationCircle({ cor, variableNames }) {
               })),
               // Text labels near vector tips
               {
-                x: cor.map((d) => d[x] * 1.15), // Increase distance to reduce overlap
-                y: cor.map((d) => d[y] * 1.15), // Increase distance to reduce overlap
+                x: cor.map((d) => d[x] * 1.15),
+                y: cor.map((d) => d[y] * 1.15),
                 text: variableNames || cor.map((_, i) => `Var ${i + 1}`),
                 mode: 'text',
                 type: 'scatter',
                 textposition: 'top center',
-                textfont: { color: '#FF8787', size: 12 }, // Smaller font size to reduce overlap
+                textfont: { color: '#FF8787', size: 12 },
                 showlegend: false,
               },
             ]}
             layout={{
-              title: {
-                text: `C${x + 1} vs C${y + 1}`,
-                font: { color: '#1E293B', size: 16 },
-              },
+              // Removed the title property to avoid double naming
               xaxis: {
-                range: [-1.3, 1.3], // Slightly increase range to accommodate labels
+                range: [-1.3, 1.3],
                 title: { text: `C${x + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
                 zerolinewidth: 2,
@@ -152,7 +146,7 @@ export function CorrelationCircle({ cor, variableNames }) {
                 automargin: true,
               },
               yaxis: {
-                range: [-1.3, 1.3], // Slightly increase range to accommodate labels
+                range: [-1.3, 1.3],
                 title: { text: `C${y + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
                 zerolinewidth: 2,
@@ -194,7 +188,7 @@ export function CorrelationCircle({ cor, variableNames }) {
               ],
               showlegend: true,
               legend: {
-                x: 1.05, // Move legend to the right of the plot
+                x: 1.05,
                 y: 1,
                 xanchor: 'left',
                 yanchor: 'top',
@@ -203,11 +197,11 @@ export function CorrelationCircle({ cor, variableNames }) {
               paper_bgcolor: 'rgba(0,0,0,0)',
               plot_bgcolor: 'rgba(0,0,0,0)',
               font: { color: '#1E293B' },
-              margin: { t: 50, b: 50, l: 50, r: 50 },
+              margin: { t: 30, b: 50, l: 50, r: 50 }, // Reduced top margin since there's no Plotly title
               hovermode: 'closest',
               autosize: true,
             }}
-            style={{ width: '100%', height: '450px' }} // Slightly increase height for better visibility
+            style={{ width: '100%', height: '450px' }}
             config={{ responsive: true }}
           />
         </div>
