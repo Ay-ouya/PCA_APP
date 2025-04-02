@@ -39,17 +39,19 @@ h1 {
   margin: 0;
   padding: 10px 0;
   text-align: center;
-  color: var(--primary-color); /* Use the soft blue for the main header */
-  text-shadow: 1px 2px 2px rgba(96, 165, 250, 0.2); /* Subtle shadow matching the primary color */
-  display: flex;
-  justify-content: center;
-  gap: 10px;
+  color: var(--primary-color); /* Soft blue for the main header */
+  text-shadow: 1px 2px 2px rgba(96, 165, 250, 0.2); /* Subtle shadow */
+  display: flex; /* Keep flex for alignment */
+  align-items: center; /* Vertically center text and image */
+  justify-content: center; /* Horizontally center the content */
+  gap: 10px; /* Space between text and image */
 }
 
-img{
-  width: 250px;
-  height: 250px;
-  object-fit: contain;
+img {
+  width: 50px; /* Adjust size as needed (smaller than 250px for header) */
+  height: 50px; /* Maintain aspect ratio */
+  object-fit: contain; /* Ensure image fits within bounds */
+  vertical-align: middle; /* Align with text baseline */
 }
 
 h2 {
