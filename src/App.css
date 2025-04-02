@@ -1,13 +1,12 @@
-
 :root {
-  --primary-color: #696b63;
-  --other-primary-color: #41423b;
-  --darker-primary-color: #33342f;
-  --main-text-color: #d7b137;
-  --secondary-color: #ffde7c;
-  --secondary-lighter-color: #f9e6ad;
-  --hover-color: #a98d2f;
-  --accent-color: #e7cd7e;
+  --primary-color: #3B82F6; /* Main blue for buttons, headers */
+  --other-primary-color: #1E3A8A; /* Darker blue for secondary elements */
+  --darker-primary-color: #0F172A; /* Deep navy for main background */
+  --main-text-color: #F1F5F9; /* Off-white for primary text */
+  --secondary-color: #FBBF24; /* Warm yellow-orange for highlights */
+  --secondary-lighter-color: #FEF3C7; /* Light yellow for subtle backgrounds */
+  --hover-color: #F59E0B; /* Darker yellow-orange for hover states */
+  --accent-color: #2DD4BF; /* Teal for accents */
   --border-radius: 8px;
   --transition-speed: 0.3s;
 }
@@ -41,7 +40,7 @@ h1 {
   padding: 10px 0;
   text-align: center;
   color: var(--main-text-color);
-  text-shadow: 1px 2px 2px #324b4e;
+  text-shadow: 1px 2px 2px #1E3A8A; /* Updated to match the darker blue */
 }
 
 h2 {
@@ -62,8 +61,8 @@ h3 {
 p {
   font-size: 1rem;
   line-height: 1.6;
+  color: var(--main-text-color); /* Ensure paragraphs are readable */
 }
-
 
 .App {
   margin: 0;
@@ -77,9 +76,8 @@ p {
 .App-header {
   padding: 1rem;
   text-align: center;
-  /* box-shadow: 0 4px 12px rgba(59, 55, 55, 0.785); */
-  background-color: #33342f;
-  border-bottom: 2px solid var(--main-text-color);
+  background-color: var(--other-primary-color);
+  border-bottom: 2px solid var(--primary-color);
 }
 
 #no-data {
@@ -102,7 +100,6 @@ p {
   align-items: center;
   margin-left: 200px;
   padding: 20px;
-  /* box-shadow: 0 4px 12px rgba(59, 55, 55, 0.785); */
   align-items: center;
 }
 
@@ -110,7 +107,7 @@ p {
   padding-right: 20px;
   align-items: center;
   width: 10em;
-  color: var(--secondary-color);
+  color: var(--main-text-color); /* Off-white for readability */
   font-weight: 400;
 }
 
@@ -125,7 +122,7 @@ p {
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid var(--main-text-color);
+  border: 2px solid var(--primary-color); /* Blue border */
   border-radius: 50%;
   margin-right: 8px;
   vertical-align: middle;
@@ -135,12 +132,12 @@ p {
 }
 
 .form-check-input:checked+.form-check-label::before {
-  background-color: var(--main-text-color);
-  border-color: var(--secondary-color);
+  background-color: var(--secondary-color); /* Yellow-orange when checked */
+  border-color: var(--primary-color);
 }
 
 .form-check-label:hover::before {
-  border-color: var(--hover-color);
+  border-color: var(--hover-color); /* Darker yellow-orange on hover */
 }
 
 .form-check-input:checked+.form-check-label::after {
@@ -168,7 +165,6 @@ p {
   align-items: center;
   margin: 0 auto;
   padding: 10px 10px 10px 350px;
-  /* box-shadow: 0 4px 12px rgba(59, 55, 55, 0.785); */
 }
 
 .upload .title {
@@ -190,8 +186,8 @@ p {
   padding: 10px 20px;
   font-size: 1rem;
   font-weight: 500;
-  color: var(--secondary-color);
-  border: 2px solid var(--secondary-color);
+  color: var(--primary-color); /* Blue text */
+  border: 2px solid var(--primary-color); /* Blue border */
   border-radius: var(--border-radius);
   cursor: pointer;
   text-align: center;
@@ -199,8 +195,8 @@ p {
 }
 
 .upload .custom-file-upload:hover {
-  background-color: var(--secondary-color);
-  color: var(--primary-color);
+  background-color: var(--secondary-color); /* Yellow-orange background on hover */
+  color: var(--darker-primary-color); /* Dark navy text */
 }
 
 .upload .custom-file-upload:active {
@@ -210,27 +206,26 @@ p {
 .upload .fileName {
   margin-left: 10px;
   font-size: 0.9rem;
-  color: var(--secondary-color);
+  color: var(--main-text-color);
 }
 
 .upload .url {
   padding: 10px 15px;
   font-size: 1rem;
-  color: var(--secondary-color);
-  background-color: #33342f;
-  border: 2px solid var(--secondary-color);
+  color: var(--main-text-color);
+  background-color: var(--other-primary-color); /* Darker blue background */
+  border: 2px solid var(--primary-color); /* Blue border */
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
 
 .upload .url:focus {
   outline: none;
-  border-color: var(--primary-color);
-  /* box-shadow: 0 0 0 3px var(--main-text-color); */
+  border-color: var(--secondary-color); /* Yellow-orange border on focus */
 }
 
 .upload .url .form-control[type="text"] {
-  background-color: red;
+  background-color: red; /* This seems like a placeholder; consider removing or updating */
 }
 
 .upload .url::placeholder {
@@ -256,9 +251,9 @@ p {
   width: 50px;
   padding: 10px 15px;
   font-size: 1rem;
-  color: var(--secondary-color);
-  background-color: #33342f;
-  border: 2px solid var(--secondary-color);
+  color: var(--main-text-color);
+  background-color: var(--other-primary-color); /* Darker blue background */
+  border: 2px solid var(--primary-color); /* Blue border */
   border-radius: var(--border-radius);
   transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
 }
@@ -269,18 +264,11 @@ p {
 
 .insert .form-control:focus {
   outline: none;
-  border-color: var(--primary-color);
-  /* box-shadow: 0 0 0 3px var(--main-text-color); */
+  border-color: var(--secondary-color); /* Yellow-orange border on focus */
 }
 
 .insert .form-control[type="number"]::-webkit-inner-spin-button,
 .insert .form-control[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.insert .form-control[type="number"]::-webkit-outer-spin-button,
-.insert .form-control[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -292,7 +280,6 @@ p {
   align-items: center;
   gap: 10px;
   margin: 0 0 auto 200px;
-  /* box-shadow: 0 4px 12px rgba(59, 55, 55, 0.785); */
   flex-wrap: wrap;
 }
 
@@ -321,9 +308,9 @@ p {
 .type-select .dropdown-toggle {
   padding: 10px 15px;
   font-size: 1rem;
-  color: var(--secondary-color);
-  background-color: #33342f;
-  border: 2px solid var(--main-text-color);
+  color: var(--main-text-color);
+  background-color: var(--other-primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
   background-image: url('arrow.svg');
@@ -334,8 +321,8 @@ p {
 }
 
 .type-select .dropdown-toggle:hover {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px var(--main-text-color);
+  border-color: var(--secondary-color);
+  box-shadow: 0 0 0 3px var(--accent-color); /* Teal shadow on hover */
 }
 
 .type-select .dropdown-menu {
@@ -343,8 +330,8 @@ p {
   top: 100%;
   left: 0;
   right: 0;
-  background-color: #33342f;
-  border: 2px solid var(--main-text-color);
+  background-color: var(--other-primary-color);
+  border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   z-index: 1000;
   margin-top: 2px;
@@ -352,7 +339,7 @@ p {
 
 .type-select .dropdown-option {
   padding: 10px;
-  color: var(--secondary-color);
+  color: var(--main-text-color);
   cursor: pointer;
   transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
@@ -361,7 +348,7 @@ p {
   background-color: var(--hover-color);
 }
 
-/************************* CRETIRIA *********************************/
+/************************* CRITERIA *********************************/
 .criteria-selection {
   display: flex;
   align-items: center;
@@ -379,12 +366,10 @@ p {
 }
 
 .custom-check .form-check-label {
-  color: var(--secondary-color);
+  color: var(--main-text-color);
   font-weight: 400;
   padding-left: 25px;
   position: relative;
-  /* cursor: pointer; */
-  /* transition: color var(--transition-speed) ease; */
 }
 
 .custom-check .form-check-label::before {
@@ -395,14 +380,14 @@ p {
   transform: translateY(-50%);
   width: 16px;
   height: 16px;
-  border: 2px solid var(--main-text-color);
+  border: 2px solid var(--primary-color);
   border-radius: 4px;
   background-color: var(--darker-primary-color);
   transition: background-color var(--transition-speed) ease;
 }
 
 .custom-check .form-check-input:checked+.form-check-label::before {
-  background-color: var(--main-text-color);
+  background-color: var(--secondary-color);
 }
 
 .custom-check .form-check-input:checked+.form-check-label::after {
@@ -431,7 +416,7 @@ button {
   size: 36px;
   font-weight: 600;
   color: #fff;
-  background-color: var(--main-text-color);
+  background-color: var(--primary-color);
   border: 2px solid var(--primary-color);
   border-radius: var(--border-radius);
   cursor: pointer;
@@ -439,12 +424,13 @@ button {
 }
 
 button:hover {
-  background-color: var(--hover-color);
+  background-color: var(--secondary-color);
+  border-color: var(--secondary-color);
 }
 
 button:active {
-  background-color: var(--active-color);
-  border-color: var(--active-color);
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
   transform: scale(0.98);
 }
 
@@ -456,13 +442,12 @@ button:active {
 }
 
 .test-statistic {
-  background-color: var(--darker-primary-color);
+  background-color: var(--primary-color);
   text-decoration: underline;
 }
 
 /*********************************** TABLE ********************************************/
 .initial-table {
-  /* width: 100%; */
   width: 100%;
   overflow-x: auto;
   overflow-y: auto;
@@ -475,7 +460,6 @@ button:active {
   width: max-content;
   border-collapse: collapse;
   background-color: var(--secondary-lighter-color);
-  /* border-radius: 8px; */
   overflow: auto;
 }
 
@@ -483,14 +467,14 @@ button:active {
 .initial-table td:not(:first-child) {
   padding: 0;
   text-align: center;
-  border: 1px solid var(--main-text-color);
+  border: 1px solid var(--primary-color);
   height: 50px;
 }
 
 .initial-table thead th {
   background-color: var(--secondary-color);
   font-weight: 600;
-  color: var(--primary-color);
+  color: var(--darker-primary-color);
   text-transform: uppercase;
   font-size: 0.9rem;
 }
@@ -503,26 +487,18 @@ button:active {
 .initial-table th:first-child {
   font-weight: 500;
   background-color: var(--secondary-color);
-  color: var(--primary-color);
+  color: var(--darker-primary-color);
   position: -webkit-sticky;
   position: sticky;
   left: 0;
   max-width: 80px;
   padding: 0;
   text-align: center;
-  border: 1px solid var(--main-text-color);
+  border: 1px solid var(--primary-color);
 }
-
-
 
 .initial-table .form-control[type="number"]::-webkit-inner-spin-button,
 .initial-table .form-control[type="number"]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.initial-table .form-control[type="number"]::-webkit-outer-spin-button,
-.initial-table .form-control[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
@@ -531,7 +507,7 @@ button:active {
   font-size: 1rem;
   font-weight: bolder;
   text-align: center;
-  color: var(--primary-color);
+  color: var(--darker-primary-color);
   background-color: var(--secondary-lighter-color);
   border: none;
   width: 60px;
@@ -541,7 +517,6 @@ button:active {
 .initial-table .form-control::placeholder {
   font-weight: lighter;
 }
-
 
 .initial-table .form-control:hover {
   border-color: var(--hover-color);
@@ -570,9 +545,9 @@ button:active {
   text-align: left;
   max-width: 800px;
   margin: 0 auto;
-  color: var(--secondary-lighter-color);
+  color: var(--main-text-color);
   border-radius: 10px;
-  background-color: #3c3c32;
+  background-color: var(--other-primary-color);
   padding: 10px;
 }
 
@@ -587,17 +562,19 @@ button:active {
   font-style: italic;
   font-weight: bold;
   margin: 0 5px;
+  color: var(--secondary-color); /* Highlight with yellow-orange */
 }
 
 .nonN {
   font-style: italic;
   font-weight: bold;
   margin: 0 5px;
+  color: var(--accent-color); /* Highlight with teal */
 }
 
 /******************************************************************************/
 .calculated-result {
-  background-color: #5b5849;
+  background-color: var(--other-primary-color);
   border-radius: var(--border-radius);
   margin: 10px auto;
   max-width: 1200px;
@@ -619,9 +596,8 @@ button:active {
 }
 
 .math {
-  color: var(--accent-color);
+  color: var(--accent-color); /* Teal for math equations */
   margin-bottom: 10px;
-  max-width: 100%;
   max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -640,7 +616,7 @@ button:active {
   margin: 1rem 0;
   padding: 1rem;
   border-radius: 5px;
-  color: var(--secondary-color);
+  color: var(--main-text-color);
   max-width: 100%;
   display: flex;
   justify-content: center;
@@ -658,9 +634,8 @@ button:active {
 }
 
 /****************************** PLOTS ************************************************/
-
 .plot-container {
-  background-color: #5c563e;
+  background-color: #2A4365; /* Slightly lighter than the darker blue */
   border-radius: var(--border-radius);
 }
 
@@ -671,7 +646,7 @@ button:active {
   gap: 5px;
 }
 
-.plot-wrap{
+.plot-wrap {
   width: 40%;
   min-width: 400px;
 }
@@ -690,13 +665,13 @@ button:active {
 
 .correlation-col h4 {
   text-align: center;
-  color: #333;
-  font-family: Arial, sans-serif;
+  color: var(--main-text-color); /* Updated to off-white for readability */
+  font-family: 'Times New Roman';
   margin-bottom: 15px;
 }
 
 .plot-wrapper {
-  background: #5c563e;
+  background: #2A4365;
   border-radius: 8px;
   width: 100%;
   max-width: 500px;
