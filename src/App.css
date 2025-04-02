@@ -23,6 +23,11 @@ body {
   overflow-y: hidden;
 }
 
+img{
+  width:500px;
+  height:500px;
+}
+
 h1,
 h2,
 h3,
