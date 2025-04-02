@@ -257,13 +257,13 @@ function App() {
             if (pcaType === 'Normed_PCA') {
                 setResult({
                     ...response.data,
-                    principal_eigen_values: response.data.explained_variance || [], // Map explained_variance to principal_eigen_values
+                    principal_eigen_values: response.data.explained_variance || [],
                 });
                 setResult2({});
             } else if (pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') {
                 setResult2({
                     ...response.data,
-                    principal_eigen_values: response.data.explained_variance || [], // Map explained_variance to principal_eigen_values
+                    principal_eigen_values: response.data.explained_variance || [],
                 });
                 setResult({});
             }
@@ -577,6 +577,7 @@ function App() {
                                                         dangerouslySetInnerHTML={{
                                                             __html: katex.renderToString(
                                                                 result.principal_eigen_values
+                                                                    .slice(0, result.n_component) // Limit to n_component
                                                                     .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                                     .join(', '),
                                                                 { throwOnError: false, displayMode: false }
@@ -685,6 +686,7 @@ function App() {
                                                         dangerouslySetInnerHTML={{
                                                             __html: katex.renderToString(
                                                                 result2.principal_eigen_values
+                                                                    .slice(0, result2.n_component) // Limit to n_component
                                                                     .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                                     .join(', '),
                                                                 { throwOnError: false, displayMode: false }
