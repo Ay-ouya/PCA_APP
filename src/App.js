@@ -20,11 +20,12 @@ function App() {
         individue_names: [],
         variable_names: [],
         data: [],
-    })
+    });
     const [numIndividuals, setNumIndividuals] = useState(0);
     const [numVariables, setNumVariables] = useState(0);
     const [pcaType, setPcaType] = useState('Normed_PCA');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [loading, setLoading] = useState(false); // Added loading state
     const [result, setResult] = useState({
         input_matrix_X: [],
         correlation_matrix_R: [],
@@ -68,9 +69,7 @@ function App() {
         sorted_eigenvalues: [],
         diagonal_of_covariance_matrix: [],
         off_diagonal_elements: [],
-
     });
-
 
     const pcaOptions = [
         { value: 'Normed_PCA', label: 'Normalized' },
@@ -227,7 +226,6 @@ function App() {
         if (dataSource === 'file') {
             formData.append('file', file);
         } else if (dataSource === 'url') {
-            // Ensure the URL is the raw file URL
             const rawUrl = datasetUrl.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/');
             formData.append('datasetUrl', rawUrl);
         } else if (dataSource === 'manual') {
@@ -242,12 +240,12 @@ function App() {
             formData.append('criteria', criteria);
         }
 
+        setLoading(true); // Start loading
         try {
             const response = await axios.post('https://youyaa.pythonanywhere.com/run-pca', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             console.log("Response from backend:", response.data);
-
 
             if (pcaType === 'Normed_PCA') {
                 setResult(response.data);
@@ -258,8 +256,12 @@ function App() {
             }
         } catch (error) {
             console.error('Error:', error);
+            alert('Failed to run PCA: ' + (error.response ? JSON.stringify(error.response.data) : error.message));
+        } finally {
+            setLoading(false); // End loading
         }
     };
+
     const testPropStatistic = async (C, sorted_eigenvalues) => {
         try {
             const response = await axios.post('https://youyaa.pythonanywhere.com/test-statistic', {
@@ -278,9 +280,9 @@ function App() {
         }
 
         const matrixRows = matrix.map(row => {
-        if (!Array.isArray(row)) return ''; // Handle non-array rows
-        return row.map(value => Number(value).toFixed(2)).join(' & ');
-    }).join(' \\\\ ');
+            if (!Array.isArray(row)) return ''; // Handle non-array rows
+            return row.map(value => Number(value).toFixed(2)).join(' & ');
+        }).join(' \\\\ ');
 
         const latexString = `
             ${title ? title + ' = ' : ''} 
@@ -467,7 +469,6 @@ function App() {
                         </Button>
                     </div>
                 </Form>
-
             </header>
             <main className='main-content'>
                 <div className='description'>
@@ -489,253 +490,246 @@ function App() {
                     </p>
                 </div>
                 <div className='calculated-result'>
-                    <div className='inputed-matrix'>
-                        {pcaType === 'Normed_PCA' && renderMatrix(result.input_matrix_X, 'A')}
-                        {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && renderMatrix(result2.Inputed_Data, 'A')}
-                    </div>
-                    {pcaType === 'Normed_PCA' && (
-                        <div className='Steps-normed-pca'>
-
-                            <div className='normal-std'>
-                                <h3>1. Normalization and Standardization : <span className='math' id="equation1"></span></h3>
-                                {renderMatrix(result.Standerdize_Reduced_matrix, 'Z')}
+                    {loading ? (
+                        <p>Loading PCA results...</p>
+                    ) : (
+                        <>
+                            <div className='inputed-matrix'>
+                                {pcaType === 'Normed_PCA' && renderMatrix(result.input_matrix_X, 'A')}
+                                {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && 
+                                    renderMatrix(result2.Inputed_Data, 'A')}
                             </div>
-
-                            <div className='corr-mat'>
-                                <h3>2. Calculating Correlation Matrix : <span className='math' id="equation2"></span> or <span className='math' id='equation3'></span></h3>
-                                {renderMatrix(result.correlation_matrix_R, 'R')}
-                            </div>
-
-                            <div className='eigen-val'>
-                                <h3>3. Finding Eigen Values and Sorting them : <span className='math' id="equation4"></span></h3>
-                                <div className='math'
-                                    dangerouslySetInnerHTML={{
-                                        __html: katex.renderToString(
-                                            result.explained_variance
-                                                .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                .join(', '),
-                                            {
-                                                throwOnError: false,
-                                                displayMode: false,
-                                            }
-                                        ),
-                                    }}
-                                />
-                            </div>
-
-                            <div className='qual'>
-                                <h3>4. Principal Axes using {criteria === 'quality' && (<span>Quality of representation : <span className='math' id="equation5_6"></span></span>)} {criteria === 'kaiser' && (<span>Kaiser Criterion : <span className='math' id="equation9"></span></span>)}</h3>
-                                <div className='math'>
-                                    {criteria === 'quality' && (<span
-                                        dangerouslySetInnerHTML={{
-                                            __html: katex.renderToString(
-                                                result.cumulative_variance
-                                                    .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                    .join(', '),
-                                                {
-                                                    throwOnError: false,
-                                                    displayMode: false,
-                                                }
-                                            ),
-                                        }}
-                                    />)}
-
-                                    {result.cumulative_variance && result.cumulative_variance.length > 0 && (
-                                        <div style={{ 'fontFamily': 'Times New Roman' }}>
-                                            {` There ${result.n_component > 1 ? 'are' : 'is'} ${result.n_component} principal axe${result.n_component > 1 ? 's' : ''} relative to `}
-                                            <span
+                            {pcaType === 'Normed_PCA' && (
+                                <div className='Steps-normed-pca'>
+                                    <div className='normal-std'>
+                                        <h3>1. Normalization and Standardization : <span className='math' id="equation1"></span></h3>
+                                        {renderMatrix(result.Standerdize_Reduced_matrix, 'Z')}
+                                    </div>
+                                    <div className='corr-mat'>
+                                        <h3>2. Calculating Correlation Matrix : <span className='math' id="equation2"></span> or <span className='math' id='equation3'></span></h3>
+                                        {renderMatrix(result.correlation_matrix_R, 'R')}
+                                    </div>
+                                    <div className='eigen-val'>
+                                        <h3>3. Finding Eigen Values and Sorting them : <span className='math' id="equation4"></span></h3>
+                                        <div className='math'
+                                            dangerouslySetInnerHTML={{
+                                                __html: katex.renderToString(
+                                                    Array.isArray(result.explained_variance) && result.explained_variance.length > 0
+                                                        ? result.explained_variance
+                                                            .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                            .join(', ')
+                                                        : 'No eigenvalues available',
+                                                    {
+                                                        throwOnError: false,
+                                                        displayMode: false,
+                                                    }
+                                                ),
+                                            }}
+                                        />
+                                    </div>
+                                    <div className='qual'>
+                                        <h3>4. Principal Axes using {criteria === 'quality' && (<span>Quality of representation : <span className='math' id="equation5_6"></span></span>)} {criteria === 'kaiser' && (<span>Kaiser Criterion : <span className='math' id="equation9"></span></span>)}</h3>
+                                        <div className='math'>
+                                            {criteria === 'quality' && (<span
                                                 dangerouslySetInnerHTML={{
                                                     __html: katex.renderToString(
-                                                        result.principal_eigen_values
-                                                            .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                            .join(', '),
+                                                        Array.isArray(result.cumulative_variance) && result.cumulative_variance.length > 0
+                                                            ? result.cumulative_variance
+                                                                .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                .join(', ')
+                                                            : 'No cumulative variance available',
                                                         {
                                                             throwOnError: false,
                                                             displayMode: false,
                                                         }
                                                     ),
                                                 }}
-                                                style={{ fontSize: '12px' }}
-                                            />
+                                            />)}
+                                            {Array.isArray(result.cumulative_variance) && result.cumulative_variance.length > 0 && (
+                                                <div style={{ 'fontFamily': 'Times New Roman' }}>
+                                                    {` There ${result.n_component > 1 ? 'are' : 'is'} ${result.n_component} principal axe${result.n_component > 1 ? 's' : ''} relative to `}
+                                                    <span
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: katex.renderToString(
+                                                                Array.isArray(result.principal_eigen_values) && result.principal_eigen_values.length > 0
+                                                                    ? result.principal_eigen_values
+                                                                        .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                        .join(', ')
+                                                                    : 'No principal eigenvalues available',
+                                                                {
+                                                                    throwOnError: false,
+                                                                    displayMode: false,
+                                                                }
+                                                            ),
+                                                        }}
+                                                        style={{ fontSize: '12px' }}
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
-                                    )}
+                                    </div>
+                                    <div className='eigen-vect'>
+                                        <h3>5. Calculating Eigen Vectors : <span className='math' id="equation6"></span></h3>
+                                        {renderMatrix(result.sorted_eigenvectors, 'U_k')}
+                                    </div>
+                                    <div className='prin-comp'>
+                                        <h3>6. Calculating the Principal Components : <span className='math' id="equation7"></span></h3>
+                                        {renderMatrix(result.principal_components_C, 'C_k')}
+                                    </div>
+                                    <div className='visual'>
+                                        <h3>Visualization: <em>(Individuals Representation and Correlation Circle)</em></h3>
+                                        <PairwiseComponentsPlot principalComponents={result.principal_components_C} individueNames={result.individue_names} />
+                                        <h4>Calculating the Correlation: <span className='math' id='equation8'></span></h4>
+                                        {renderMatrix(result.correlation_matrix, 'Cor(X^i , C_k)')}
+                                        <CorrelationCircle cor={result.correlation_matrix} variableNames={result.variable_names} className='correlation-circle-container' />
+                                    </div>
                                 </div>
-                            </div>
-
-                            <div className='eigen-vect'>
-                                <h3>5. Calculating Eigen Vecotrs : <span className='math' id="equation6"></span></h3>
-                                {renderMatrix(result.sorted_eigenvectors, 'U_k')}
-                            </div>
-
-                            <div className='prin-comp'>
-                                <h3>6. Calculating the Principal Components : <span className='math' id="equation7"></span></h3>
-                                {renderMatrix(result.principal_components_C, 'C_k')}
-                            </div>
-
-                            <div className='visual'>
-                                <h3>Visualization: <em>(Individuals Representation and Correlation Circle)</em></h3>
-                                <PairwiseComponentsPlot principalComponents={result.principal_components_C} individueNames={result.individue_names} />
-                                <h4>Calculating the Correlation: <span className='math' id='equation8'></span></h4>
-                                {renderMatrix(result.correlation_matrix, 'Cor(X^i , C_k)')}
-                                <CorrelationCircle cor={result.correlation_matrix} variableNames={result.variable_names} className='correlation-circle-container' />
-                            </div>
-                        </div>)}
-                    {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && (
-                        <div className='Steps-non-normed-pca'>
-                            <div className='normal-std'>
-                                <h3>1. Normalization : <span className='math' id="equation_1"></span></h3>
-                                {renderMatrix(result2.Centered_Matrix, 'X')}
-                            </div>
-
-                            <div className='var-cov-mat'>
-                                <h3>2. Calculating the Variance-Covariance Matrix : <span className='math' id="equation_2"></span></h3>
-                                {renderMatrix(result2.covariance_matrix, 'V')}
-                            </div>
-
-                            <div className='metric'>
-                                <h3>3. Determining the Metric : {pcaType === 'Non_normed_PCA_homogeneous' && (<span className='math' id="equation_3"></span>)}{pcaType === 'Non_normed_PCA_heterogeneous' && (<span className='math' id="equation_4"></span>)}</h3>
-                                {renderMatrix(result2.metric, 'M')}
-                            </div>
-
-                            <div className='eigen-val'>
-                                <h3>4. Calculating Eigen Vlaues and sorting them : <span className='math' id="equation_5"></span></h3>
-                                <div className='math'
-                                    dangerouslySetInnerHTML={{
-                                        __html: katex.renderToString(
-                                            result2.explained_variance
-                                                .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                .join(', '),
-                                            {
-                                                throwOnError: false,
-                                                displayMode: false,
-                                            }
-                                        ),
-                                    }}
-                                />
-                            </div>
-
-                            <div className='qual'>
-                                <h3>5. Calculating the Quality of representation : <span className='math' id="equation5_6"></span></h3>
-                                <div className='math'>
-                                    <span
+                            )}
+                            {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && (
+                                <div className='Steps-non-normed-pca'>
+                                    <div className='normal-std'>
+                                        <h3>1. Normalization : <span className='math' id="equation_1"></span></h3>
+                                        {renderMatrix(result2.Centered_Matrix, 'X')}
+                                    </div>
+                                    <div className='var-cov-mat'>
+                                        <h3>2. Calculating the Variance-Covariance Matrix : <span className='math' id="equation_2"></span></h3>
+                                        {renderMatrix(result2.covariance_matrix, 'V')}
+                                    </div>
+                                    <div className='metric'>
+                                        <h3>3. Determining the Metric : {pcaType === 'Non_normed_PCA_homogeneous' && (<span className='math' id="equation_3"></span>)}{pcaType === 'Non_normed_PCA_heterogeneous' && (<span className='math' id="equation_4"></span>)}</h3>
+                                        {renderMatrix(result2.metric, 'M')}
+                                    </div>
+                                    <div className='eigen-val'>
+                                        <h3>4. Calculating Eigen Values and sorting them : <span className='math' id="equation_5"></span></h3>
+                                        <div className='math'
+                                            dangerouslySetInnerHTML={{
+                                                __html: katex.renderToString(
+                                                    Array.isArray(result2.explained_variance) && result2.explained_variance.length > 0
+                                                        ? result2.explained_variance
+                                                            .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                            .join(', ')
+                                                        : 'No eigenvalues available',
+                                                    {
+                                                        throwOnError: false,
+                                                        displayMode: false,
+                                                    }
+                                                ),
+                                            }}
+                                        />
+                                    </div>
+                                    <div className='qual'>
+                                        <h3>5. Calculating the Quality of representation : <span className='math' id="equation5_6"></span></h3>
+                                        <div className='math'>
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: katex.renderToString(
+                                                        Array.isArray(result2.cumulative_variance) && result2.cumulative_variance.length > 0
+                                                            ? result2.cumulative_variance
+                                                                .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                .join(', ')
+                                                            : 'No cumulative variance available',
+                                                        {
+                                                            throwOnError: false,
+                                                            displayMode: false,
+                                                        }
+                                                    ),
+                                                }}
+                                            />
+                                            {Array.isArray(result2.cumulative_variance) && result2.cumulative_variance.length > 0 && (
+                                                <div style={{ fontFamily: 'Times New Roman' }}>
+                                                    {` So there ${result2.n_component > 1 ? 'are' : 'is'} ${result2.n_component} principal axe${result2.n_component > 1 ? 's' : ''} relative to `}
+                                                    <span
+                                                        dangerouslySetInnerHTML={{
+                                                            __html: katex.renderToString(
+                                                                Array.isArray(result2.principal_eigen_values) && result2.principal_eigen_values.length > 0
+                                                                    ? result2.principal_eigen_values
+                                                                        .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                        .join(', ')
+                                                                    : 'No principal eigenvalues available',
+                                                                {
+                                                                    throwOnError: false,
+                                                                    displayMode: false,
+                                                                }
+                                                            ),
+                                                        }}
+                                                        style={{ fontSize: '12px' }}
+                                                    />
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                    <div className='eigen-vect'>
+                                        <h3>6. Calculating Eigen Vectors : <span className='math' id="equation_7"></span></h3>
+                                        {renderMatrix(result2.sorted_eigenvectors, 'U_k')}
+                                    </div>
+                                    <div className='prin-comp'>
+                                        <h3>7. Calculating the Principal Components : <span className='math' id="equation_8"></span></h3>
+                                        {renderMatrix(result2.principal_components_C, 'C_k')}
+                                    </div>
+                                    <div className='visual'>
+                                        <h3>8. Individuals Representation :</h3>
+                                        <PairwiseComponentsPlot principalComponents={result2.principal_components_C} individueNames={result2.individue_names} />
+                                    </div>
+                                    <div className='inert-cont'>
+                                        <h3>9. Inertia Contribution of <span className='math'
+                                            dangerouslySetInnerHTML={{
+                                                __html: katex.renderToString('X_i', { throwOnError: false, displayMode: false }),
+                                            }}
+                                        /> : <span className='math' id="equation_9" /></h3>
+                                        {renderMatrix(result2.inertia_part, '\\cos^2 (\\theta_{ik})')}
+                                    </div>
+                                    <div className='cont-relat'>
+                                        <h3>10. Relative Contribution : <span className='math' id='equation_10'></span></h3>
+                                        {renderMatrix(result2.contribution_matrix, 'p_{ik}')}
+                                    </div>
+                                    <div className='visual'>
+                                        <h3>11. Correlation Circle: <span className='math' id='equation_11'></span></h3>
+                                        {renderMatrix(result2.correlation_matrix, 'Cor(X^i , C_k)')}
+                                        <CorrelationCircle cor={result2.correlation_matrix} variableNames={result2.variable_names} className='correlation-circle-container' />
+                                    </div>
+                                </div>
+                            )}
+                            {(Array.isArray(result.explained_variance) && result.explained_variance.length > 0) && (
+                                <Row className="test">
+                                    <Col>
+                                        <Button className='test-statistic' onClick={() => testPropStatistic(result.principal_components_C, result.explained_variance)}>
+                                            Test Statistic
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )}
+                            {(Array.isArray(result2.explained_variance) && result2.explained_variance.length > 0) && (
+                                <Row className="test">
+                                    <Col>
+                                        <Button className='test-statistic' onClick={() => testPropStatistic(result2.principal_components_C, result2.explained_variance)}>
+                                            Test Statistic
+                                        </Button>
+                                    </Col>
+                                </Row>
+                            )}
+                            {(Array.isArray(test_statistic.mean_of_principal_components) && test_statistic.mean_of_principal_components.length > 0) && (
+                                <Row className="test-results">
+                                    <h2>Statistic Result</h2>
+                                    <div className='math'
                                         dangerouslySetInnerHTML={{
                                             __html: katex.renderToString(
-                                                result2.cumulative_variance
-                                                    .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                test_statistic.mean_of_principal_components
+                                                    .map((value, index) => `Mean(C_${index + 1}) = ${(typeof value === 'number' ? (Math.abs(value) < 1e-10 ? '0' : value.toFixed(2)) : value)}`)
                                                     .join(', '),
                                                 {
                                                     throwOnError: false,
-                                                    displayMode: false,
+                                                    displayMode: true,
                                                 }
                                             ),
                                         }}
                                     />
-                                    {result2.cumulative_variance && result2.cumulative_variance.length > 0 && (
-                                        <div style={{ fontFamily: 'Times New Roman' }}>
-                                            {` So there ${result2.n_component > 1 ? 'are' : 'is'} ${result2.n_component} principal axe${result2.n_component > 1 ? 's' : ''} relative to `}
-                                            <span
-                                                dangerouslySetInnerHTML={{
-                                                    __html: katex.renderToString(
-                                                        result2.principal_eigen_values
-                                                            .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                            .join(', '),
-                                                        {
-                                                            throwOnError: false,
-                                                            displayMode: false,
-                                                        }
-                                                    ),
-                                                }}
-                                                style={{ fontSize: '12px' }}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className='eigen-vect'>
-                                <h3>6. Calculating Eigen Vecotrs : <span className='math' id="equation_7"></span></h3>
-                                {renderMatrix(result2.sorted_eigenvectors, 'U_k')}
-                            </div>
-
-                            <div className='prin-comp'>
-                                <h3>7. Calculating the Principal Components : <span className='math' id="equation_8"></span></h3>
-                                {renderMatrix(result2.principal_components_C, 'C_k')}
-                            </div>
-                            <div className='visual'>
-                                <h3>8. Individuals Representation :</h3>
-                                <PairwiseComponentsPlot principalComponents={result2.principal_components_C} individueNames={result2.individue_names} />
-                            </div>
-
-                            <div className='inert-cont'>
-                                <h3>9. Inertia Contribution of <span className='math'
-                                    dangerouslySetInnerHTML={{
-                                        __html: katex.renderToString(
-                                            'X_i',
-                                            {
-                                                throwOnError: false,
-                                                displayMode: false,
-                                            }
-                                        ),
-                                    }}
-                                /> : <span className='math' id="equation_9" /></h3>
-                                {renderMatrix(result2.inertia_part, '\\cos^2 (\\theta_{ik})')}
-                            </div>
-
-                            <div className='cont-relat'>
-                                <h3>10. Relative Contribution : <span className='math' id='equation_10'></span></h3>
-                                {renderMatrix(result2.contribution_matrix, 'p_{ik}')}
-                            </div>
-
-                            <div className='visual'>
-                                <h3>11. Correlation Circle: <span className='math' id='equation_11'></span></h3>
-                                {renderMatrix(result2.correlation_matrix, 'Cor(X^i , C_k)')}
-                                <CorrelationCircle cor={result2.correlation_matrix} variableNames={result2.variable_names} className='correlation-circle-container' />
-
-                            </div>
-
-
-                        </div>)}
-                    {(result.explained_variance && result.explained_variance.length > 0) && (
-                        <Row className="test">
-                            <Col>
-                                <Button className='test-statistic' onClick={() => testPropStatistic(result.principal_components_C, result.explained_variance)}>
-                                    Test Statistic
-                                </Button>
-                            </Col>
-                        </Row>
-                    )}
-
-                    {(result2.explained_variance && result2.explained_variance.length > 0) && (
-                        <Row className="test">
-                            <Col>
-                                <Button className='test-statistic' onClick={() => testPropStatistic(result2.principal_components_C, result2.explained_variance)}>
-                                    Test Statistic
-                                </Button>
-                            </Col>
-                        </Row>
-                    )}
-
-                    {(test_statistic.mean_of_principal_components && test_statistic.mean_of_principal_components.length > 0) && (
-                        <Row className="test-results">
-                            <h2>Statistic Result</h2>
-                            <div className='math'
-                                dangerouslySetInnerHTML={{
-                                    __html: katex.renderToString(
-                                        test_statistic.mean_of_principal_components
-                                            .map((value, index) => `Mean(C_${index + 1}) = ${(typeof value === 'number' ? (Math.abs(value) < 1e-10 ? '0' : value.toFixed(2)) : value)}`)
-                                            .join(', '),
-                                        {
-                                            throwOnError: false,
-                                            displayMode: true,
-                                        }
-                                    ),
-                                }}
-                            />
-                            <div className='stat'>
-                                {renderMatrix(test_statistic.variance_of_principal_components, 'V(C_k)')}
-                                {renderMatrix(test_statistic.rounded_covariance, 'Cov(C_i, C_j)')}
-                            </div>
-                        </Row>
+                                    <div className='stat'>
+                                        {renderMatrix(test_statistic.variance_of_principal_components, 'V(C_k)')}
+                                        {renderMatrix(test_statistic.rounded_covariance, 'Cov(C_i, C_j)')}
+                                    </div>
+                                </Row>
+                            )}
+                        </>
                     )}
                 </div>
             </main>
