@@ -243,7 +243,7 @@ function App() {
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/run-pca', formData, {
+            const response = await axios.post('http://youyaa.pythonanywhere.com/run-pca', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
             console.log("Response from backend:", response.data);
@@ -262,7 +262,7 @@ function App() {
     };
     const testPropStatistic = async (C, sorted_eigenvalues) => {
         try {
-            const response = await axios.post('http://localhost:5000/test-statistic', {
+            const response = await axios.post('http://youyaa.pythonanywhere.com/test-statistic', {
                 principal_components_C: C,
                 sorted_eigenvalues: sorted_eigenvalues,
             });
