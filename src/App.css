@@ -6,7 +6,7 @@
   --secondary-color: #FF8787; /* Soft coral for highlights */
   --secondary-lighter-color: #FFF1F1; /* Very light peach for subtle backgrounds */
   --hover-color: #F87171; /* Darker coral for hover states */
-  --accent-color: #5EEAD4; /* Muted teal for accents */
+  --accent-color: #22665c; /* Muted teal for accents */
   --border-radius: 8px;
   --transition-speed: 0.3s;
 }
