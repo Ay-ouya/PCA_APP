@@ -167,7 +167,7 @@ export function CorrelationCircle({ cor, variableNames }) {
                   y0: -1,
                   x1: 1,
                   y1: 1,
-                  line: { color: '#FFF1F1', width: 2 }, // Very light peach for circle
+                  line: { color: '#000000', width: 2 }, // Black for the unit circle
                 },
                 // Draw horizontal and vertical axis lines
                 {
