@@ -274,12 +274,13 @@ function App() {
 
     const renderMatrix = (matrix, title) => {
         if (!matrix || !Array.isArray(matrix) || matrix.length === 0) {
-            return;
+            return null;
         }
 
-        const matrixRows = matrix.map(row =>
-            row.map(value => Number(value).toFixed(2)).join(' & ')
-        ).join(' \\\\ ');
+        const matrixRows = matrix.map(row => {
+        if (!Array.isArray(row)) return ''; // Handle non-array rows
+        return row.map(value => Number(value).toFixed(2)).join(' & ');
+    }).join(' \\\\ ');
 
         const latexString = `
             ${title ? title + ' = ' : ''} 
@@ -489,8 +490,8 @@ function App() {
                 </div>
                 <div className='calculated-result'>
                     <div className='inputed-matrix'>
-                        {renderMatrix(result.input_matrix_X, 'A')}
-                        {renderMatrix(result2.Inputed_Data, 'A')}
+                        {pcaType === 'Normed_PCA' && renderMatrix(result.input_matrix_X, 'A')}
+                        {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && renderMatrix(result2.Inputed_Data, 'A')}
                     </div>
                     {pcaType === 'Normed_PCA' && (
                         <div className='Steps-normed-pca'>
