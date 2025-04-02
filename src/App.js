@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Container, Button, Form, Row, Col } from 'react-bootstrap';
 import axios from 'axios';
 import 'chartjs-plugin-datalabels';
@@ -25,7 +25,7 @@ function App() {
     const [numVariables, setNumVariables] = useState(0);
     const [pcaType, setPcaType] = useState('Normed_PCA');
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [loading, setLoading] = useState(false); // Added loading state
+    const [loading, setLoading] = useState(false);
     const [result, setResult] = useState({
         input_matrix_X: [],
         correlation_matrix_R: [],
@@ -77,6 +77,8 @@ function App() {
         { value: 'Non_normed_PCA_heterogeneous', label: 'Non-Normalized (Heterogeneous)' },
     ];
 
+    const equationRefs = useRef({});
+
     useEffect(() => {
         const equations = [
             { id: 'equation1', formula: 'Z = \\frac{X - \\mu}{\\sigma}' },
@@ -101,14 +103,19 @@ function App() {
         ];
 
         equations.forEach(({ id, formula }) => {
-            const element = document.getElementById(id);
+            const element = equationRefs.current[id];
             if (element) {
-                element.innerHTML = '';
-                const htmlString = katex.renderToString(formula, {
-                    throwOnError: false,
-                    displayMode: false,
-                });
-                element.innerHTML = htmlString;
+                try {
+                    katex.render(formula, element, {
+                        throwOnError: false,
+                        displayMode: false,
+                    });
+                    console.log(`Rendered equation for ${id}`);
+                } catch (error) {
+                    console.error(`Failed to render equation ${id}:`, error);
+                }
+            } else {
+                console.warn(`Element with id ${id} not found`);
             }
         });
 
@@ -123,7 +130,7 @@ function App() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);
+    }, [pcaType, loading]); // Re-run when pcaType or loading changes to ensure DOM updates
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -240,7 +247,7 @@ function App() {
             formData.append('criteria', criteria);
         }
 
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             const response = await axios.post('https://youyaa.pythonanywhere.com/run-pca', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
@@ -258,7 +265,7 @@ function App() {
             console.error('Error:', error);
             alert('Failed to run PCA: ' + (error.response ? JSON.stringify(error.response.data) : error.message));
         } finally {
-            setLoading(false); // End loading
+            setLoading(false);
         }
     };
 
@@ -280,7 +287,7 @@ function App() {
         }
 
         const matrixRows = matrix.map(row => {
-            if (!Array.isArray(row)) return ''; // Handle non-array rows
+            if (!Array.isArray(row)) return '';
             return row.map(value => Number(value).toFixed(2)).join(' & ');
         }).join(' \\\\ ');
 
@@ -291,16 +298,11 @@ function App() {
             \\end{pmatrix}
         `;
 
-        const htmlString = katex.renderToString(latexString, {
-            throwOnError: false,
-            displayMode: false
-        });
-
         return (
             <div className='matrix-container'>
                 <div
                     className='renderMatrix'
-                    dangerouslySetInnerHTML={{ __html: htmlString }}
+                    dangerouslySetInnerHTML={{ __html: katex.renderToString(latexString, { throwOnError: false, displayMode: false }) }}
                 />
             </div>
         );
@@ -398,14 +400,12 @@ function App() {
                             <Form.Control id='fileInput' className='FILE' type="file" onChange={handleFileChange} accept='.csv' />
                         </Form.Group>
                     )}
-
                     {dataSource === 'url' && (
                         <Form.Group controlId="formUrl" className="upload">
                             <Form.Label className='title'>Dataset URL :</Form.Label>
                             <Form.Control className='url' type="text" placeholder="Enter dataset URL" onChange={handleUrlChange} />
                         </Form.Group>
                     )}
-
                     {dataSource === 'manual' && (
                         <Form.Group className="insert">
                             <Form.Label className='title'>Number of Individuals</Form.Label>
@@ -422,7 +422,6 @@ function App() {
                             />
                         </Form.Group>
                     )}
-
                     {dataSource === 'manual' && numIndividuals > 0 && numVariables > 0 && (
                         <Form.Group className="initial-table">
                             <table>
@@ -464,7 +463,7 @@ function App() {
                         </Form.Group>
                     )}
                     <div className="run-button-container">
-                        <Button className="run-button" role="button" type="submit">
+                        <Button className="run-button" type="submit">
                             Run PCA
                         </Button>
                     </div>
@@ -479,7 +478,7 @@ function App() {
                         significant patterns and trends.
                     </p>
                     <p className='pca-types-names'>
-                        The are two types which are:
+                        There are two types which are:
                         <p className='normalized'> Normalized PCA </p>
                         and
                         <p className='nonN'> Non-Normalized PCA </p>
@@ -502,15 +501,25 @@ function App() {
                             {pcaType === 'Normed_PCA' && (
                                 <div className='Steps-normed-pca'>
                                     <div className='normal-std'>
-                                        <h3>1. Normalization and Standardization : <span className='math' id="equation1"></span></h3>
+                                        <h3>
+                                            1. Normalization and Standardization :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation1'] = el)} />
+                                        </h3>
                                         {renderMatrix(result.Standerdize_Reduced_matrix, 'Z')}
                                     </div>
                                     <div className='corr-mat'>
-                                        <h3>2. Calculating Correlation Matrix : <span className='math' id="equation2"></span> or <span className='math' id='equation3'></span></h3>
+                                        <h3>
+                                            2. Calculating Correlation Matrix :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation2'] = el)} /> or{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation3'] = el)} />
+                                        </h3>
                                         {renderMatrix(result.correlation_matrix_R, 'R')}
                                     </div>
                                     <div className='eigen-val'>
-                                        <h3>3. Finding Eigen Values and Sorting them : <span className='math' id="equation4"></span></h3>
+                                        <h3>
+                                            3. Finding Eigen Values and Sorting them :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation4'] = el)} />
+                                        </h3>
                                         <div className='math'
                                             dangerouslySetInnerHTML={{
                                                 __html: katex.renderToString(
@@ -519,34 +528,44 @@ function App() {
                                                             .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                             .join(', ')
                                                         : 'No eigenvalues available',
-                                                    {
-                                                        throwOnError: false,
-                                                        displayMode: false,
-                                                    }
+                                                    { throwOnError: false, displayMode: false }
                                                 ),
                                             }}
                                         />
                                     </div>
                                     <div className='qual'>
-                                        <h3>4. Principal Axes using {criteria === 'quality' && (<span>Quality of representation : <span className='math' id="equation5_6"></span></span>)} {criteria === 'kaiser' && (<span>Kaiser Criterion : <span className='math' id="equation9"></span></span>)}</h3>
+                                        <h3>
+                                            4. Principal Axes using{' '}
+                                            {criteria === 'quality' && (
+                                                <span>
+                                                    Quality of representation :{' '}
+                                                    <span className='math' ref={el => (equationRefs.current['equation5_6'] = el)} />
+                                                </span>
+                                            )}
+                                            {criteria === 'kaiser' && (
+                                                <span>
+                                                    Kaiser Criterion :{' '}
+                                                    <span className='math' ref={el => (equationRefs.current['equation9'] = el)} />
+                                                </span>
+                                            )}
+                                        </h3>
                                         <div className='math'>
-                                            {criteria === 'quality' && (<span
-                                                dangerouslySetInnerHTML={{
-                                                    __html: katex.renderToString(
-                                                        Array.isArray(result.cumulative_variance) && result.cumulative_variance.length > 0
-                                                            ? result.cumulative_variance
-                                                                .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                                .join(', ')
-                                                            : 'No cumulative variance available',
-                                                        {
-                                                            throwOnError: false,
-                                                            displayMode: false,
-                                                        }
-                                                    ),
-                                                }}
-                                            />)}
+                                            {criteria === 'quality' && (
+                                                <span
+                                                    dangerouslySetInnerHTML={{
+                                                        __html: katex.renderToString(
+                                                            Array.isArray(result.cumulative_variance) && result.cumulative_variance.length > 0
+                                                                ? result.cumulative_variance
+                                                                    .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                    .join(', ')
+                                                                : 'No cumulative variance available',
+                                                            { throwOnError: false, displayMode: false }
+                                                        ),
+                                                    }}
+                                                />
+                                            )}
                                             {Array.isArray(result.cumulative_variance) && result.cumulative_variance.length > 0 && (
-                                                <div style={{ 'fontFamily': 'Times New Roman' }}>
+                                                <div style={{ fontFamily: 'Times New Roman' }}>
                                                     {` There ${result.n_component > 1 ? 'are' : 'is'} ${result.n_component} principal axe${result.n_component > 1 ? 's' : ''} relative to `}
                                                     <span
                                                         dangerouslySetInnerHTML={{
@@ -556,10 +575,7 @@ function App() {
                                                                         .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                                         .join(', ')
                                                                     : 'No principal eigenvalues available',
-                                                                {
-                                                                    throwOnError: false,
-                                                                    displayMode: false,
-                                                                }
+                                                                { throwOnError: false, displayMode: false }
                                                             ),
                                                         }}
                                                         style={{ fontSize: '12px' }}
@@ -569,17 +585,26 @@ function App() {
                                         </div>
                                     </div>
                                     <div className='eigen-vect'>
-                                        <h3>5. Calculating Eigen Vectors : <span className='math' id="equation6"></span></h3>
+                                        <h3>
+                                            5. Calculating Eigen Vectors :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation6'] = el)} />
+                                        </h3>
                                         {renderMatrix(result.sorted_eigenvectors, 'U_k')}
                                     </div>
                                     <div className='prin-comp'>
-                                        <h3>6. Calculating the Principal Components : <span className='math' id="equation7"></span></h3>
+                                        <h3>
+                                            6. Calculating the Principal Components :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation7'] = el)} />
+                                        </h3>
                                         {renderMatrix(result.principal_components_C, 'C_k')}
                                     </div>
                                     <div className='visual'>
                                         <h3>Visualization: <em>(Individuals Representation and Correlation Circle)</em></h3>
                                         <PairwiseComponentsPlot principalComponents={result.principal_components_C} individueNames={result.individue_names} />
-                                        <h4>Calculating the Correlation: <span className='math' id='equation8'></span></h4>
+                                        <h4>
+                                            Calculating the Correlation:{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation8'] = el)} />
+                                        </h4>
                                         {renderMatrix(result.correlation_matrix, 'Cor(X^i , C_k)')}
                                         <CorrelationCircle cor={result.correlation_matrix} variableNames={result.variable_names} className='correlation-circle-container' />
                                     </div>
@@ -588,19 +613,36 @@ function App() {
                             {(pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') && (
                                 <div className='Steps-non-normed-pca'>
                                     <div className='normal-std'>
-                                        <h3>1. Normalization : <span className='math' id="equation_1"></span></h3>
+                                        <h3>
+                                            1. Normalization :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_1'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.Centered_Matrix, 'X')}
                                     </div>
                                     <div className='var-cov-mat'>
-                                        <h3>2. Calculating the Variance-Covariance Matrix : <span className='math' id="equation_2"></span></h3>
+                                        <h3>
+                                            2. Calculating the Variance-Covariance Matrix :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_2'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.covariance_matrix, 'V')}
                                     </div>
                                     <div className='metric'>
-                                        <h3>3. Determining the Metric : {pcaType === 'Non_normed_PCA_homogeneous' && (<span className='math' id="equation_3"></span>)}{pcaType === 'Non_normed_PCA_heterogeneous' && (<span className='math' id="equation_4"></span>)}</h3>
+                                        <h3>
+                                            3. Determining the Metric :{' '}
+                                            {pcaType === 'Non_normed_PCA_homogeneous' && (
+                                                <span className='math' ref={el => (equationRefs.current['equation_3'] = el)} />
+                                            )}
+                                            {pcaType === 'Non_normed_PCA_heterogeneous' && (
+                                                <span className='math' ref={el => (equationRefs.current['equation_4'] = el)} />
+                                            )}
+                                        </h3>
                                         {renderMatrix(result2.metric, 'M')}
                                     </div>
                                     <div className='eigen-val'>
-                                        <h3>4. Calculating Eigen Values and sorting them : <span className='math' id="equation_5"></span></h3>
+                                        <h3>
+                                            4. Calculating Eigen Values and sorting them :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_5'] = el)} />
+                                        </h3>
                                         <div className='math'
                                             dangerouslySetInnerHTML={{
                                                 __html: katex.renderToString(
@@ -609,16 +651,16 @@ function App() {
                                                             .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                             .join(', ')
                                                         : 'No eigenvalues available',
-                                                    {
-                                                        throwOnError: false,
-                                                        displayMode: false,
-                                                    }
+                                                    { throwOnError: false, displayMode: false }
                                                 ),
                                             }}
                                         />
                                     </div>
                                     <div className='qual'>
-                                        <h3>5. Calculating the Quality of representation : <span className='math' id="equation5_6"></span></h3>
+                                        <h3>
+                                            5. Calculating the Quality of representation :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation5_6'] = el)} />
+                                        </h3>
                                         <div className='math'>
                                             <span
                                                 dangerouslySetInnerHTML={{
@@ -628,10 +670,7 @@ function App() {
                                                                 .map((value, index) => `Q_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                                 .join(', ')
                                                             : 'No cumulative variance available',
-                                                        {
-                                                            throwOnError: false,
-                                                            displayMode: false,
-                                                        }
+                                                        { throwOnError: false, displayMode: false }
                                                     ),
                                                 }}
                                             />
@@ -646,10 +685,7 @@ function App() {
                                                                         .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
                                                                         .join(', ')
                                                                     : 'No principal eigenvalues available',
-                                                                {
-                                                                    throwOnError: false,
-                                                                    displayMode: false,
-                                                                }
+                                                                { throwOnError: false, displayMode: false }
                                                             ),
                                                         }}
                                                         style={{ fontSize: '12px' }}
@@ -659,11 +695,17 @@ function App() {
                                         </div>
                                     </div>
                                     <div className='eigen-vect'>
-                                        <h3>6. Calculating Eigen Vectors : <span className='math' id="equation_7"></span></h3>
+                                        <h3>
+                                            6. Calculating Eigen Vectors :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_7'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.sorted_eigenvectors, 'U_k')}
                                     </div>
                                     <div className='prin-comp'>
-                                        <h3>7. Calculating the Principal Components : <span className='math' id="equation_8"></span></h3>
+                                        <h3>
+                                            7. Calculating the Principal Components :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_8'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.principal_components_C, 'C_k')}
                                     </div>
                                     <div className='visual'>
@@ -671,19 +713,29 @@ function App() {
                                         <PairwiseComponentsPlot principalComponents={result2.principal_components_C} individueNames={result2.individue_names} />
                                     </div>
                                     <div className='inert-cont'>
-                                        <h3>9. Inertia Contribution of <span className='math'
-                                            dangerouslySetInnerHTML={{
-                                                __html: katex.renderToString('X_i', { throwOnError: false, displayMode: false }),
-                                            }}
-                                        /> : <span className='math' id="equation_9" /></h3>
+                                        <h3>
+                                            9. Inertia Contribution of{' '}
+                                            <span
+                                                dangerouslySetInnerHTML={{
+                                                    __html: katex.renderToString('X_i', { throwOnError: false, displayMode: false }),
+                                                }}
+                                            /> :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_9'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.inertia_part, '\\cos^2 (\\theta_{ik})')}
                                     </div>
                                     <div className='cont-relat'>
-                                        <h3>10. Relative Contribution : <span className='math' id='equation_10'></span></h3>
+                                        <h3>
+                                            10. Relative Contribution :{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_10'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.contribution_matrix, 'p_{ik}')}
                                     </div>
                                     <div className='visual'>
-                                        <h3>11. Correlation Circle: <span className='math' id='equation_11'></span></h3>
+                                        <h3>
+                                            11. Correlation Circle:{' '}
+                                            <span className='math' ref={el => (equationRefs.current['equation_11'] = el)} />
+                                        </h3>
                                         {renderMatrix(result2.correlation_matrix, 'Cor(X^i , C_k)')}
                                         <CorrelationCircle cor={result2.correlation_matrix} variableNames={result2.variable_names} className='correlation-circle-container' />
                                     </div>
@@ -716,10 +768,7 @@ function App() {
                                                 test_statistic.mean_of_principal_components
                                                     .map((value, index) => `Mean(C_${index + 1}) = ${(typeof value === 'number' ? (Math.abs(value) < 1e-10 ? '0' : value.toFixed(2)) : value)}`)
                                                     .join(', '),
-                                                {
-                                                    throwOnError: false,
-                                                    displayMode: true,
-                                                }
+                                                { throwOnError: false, displayMode: true }
                                             ),
                                         }}
                                     />
