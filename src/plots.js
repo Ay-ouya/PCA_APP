@@ -41,7 +41,7 @@ export function PairwiseComponentsPlot({ principalComponents, individueNames }) 
                   line: { color: '#1E293B', width: 1 }, // Dark slate outline
                 },
                 textposition: 'top center',
-                textfont: { color: '#1E293B' }, // Dark slate for text
+                textfont: { color: '#1E293B', size: 12 }, // Smaller font size to reduce overlap
                 hoverinfo: 'text',
                 hovertemplate: '%{text}<br>(%{x:.2f}, %{y:.2f})<extra></extra>',
               },
@@ -49,34 +49,37 @@ export function PairwiseComponentsPlot({ principalComponents, individueNames }) 
             layout={{
               title: {
                 text: `U${x + 1} vs U${y + 1}`,
-                font: { color: '#1E293B', size: 16 }, // Dark slate for title
+                font: { color: '#1E293B', size: 16 },
               },
               xaxis: {
                 title: { text: `U${x + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
                 zerolinewidth: 2,
-                zerolinecolor: '#1E293B', // Dark slate for zeroline
+                zerolinecolor: '#1E293B',
                 showgrid: true,
-                gridcolor: '#58DAC6', // Muted teal for grid
+                gridcolor: '#58DAC6',
                 tickfont: { color: '#1E293B' },
+                automargin: true, // Automatically adjust margins to prevent cutoff
               },
               yaxis: {
                 title: { text: `U${y + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
                 zerolinewidth: 2,
-                zerolinecolor: '#1E293B', // Dark slate for zeroline
+                zerolinecolor: '#1E293B',
                 showgrid: true,
-                gridcolor: '#58DAC6', // Muted teal for grid
+                gridcolor: '#58DAC6',
                 tickfont: { color: '#1E293B' },
+                automargin: true, // Automatically adjust margins to prevent cutoff
               },
               showlegend: false,
-              paper_bgcolor: 'rgba(0,0,0,0)', // Transparent background
-              plot_bgcolor: 'rgba(0,0,0,0)', // Transparent plot background
-              font: { color: '#1E293B' }, // Dark slate for all text
+              paper_bgcolor: 'rgba(0,0,0,0)',
+              plot_bgcolor: 'rgba(0,0,0,0)',
+              font: { color: '#1E293B' },
               margin: { t: 50, b: 50, l: 50, r: 50 },
               hovermode: 'closest',
+              autosize: true, // Ensure the plot resizes dynamically
             }}
-            style={{ width: '100%', height: 'max-content' }}
+            style={{ width: '100%', height: '400px' }} // Set a fixed height for consistency
             config={{ responsive: true }}
           />
         </div>
@@ -109,8 +112,8 @@ export function CorrelationCircle({ cor, variableNames }) {
                 type: 'scatter',
                 marker: {
                   size: 8,
-                  symbol: 'arrow-bar-up', // Arrow marker
-                  angleref: 'previous', // Aligns arrow with line direction
+                  symbol: 'arrow-bar-up',
+                  angleref: 'previous',
                   color: '#FF8787', // Soft coral for markers
                 },
                 line: { color: '#FF8787', width: 2 }, // Soft coral for lines
@@ -121,41 +124,43 @@ export function CorrelationCircle({ cor, variableNames }) {
               })),
               // Text labels near vector tips
               {
-                x: cor.map((d) => d[x] * 1.1),
-                y: cor.map((d) => d[y] * 1.1),
+                x: cor.map((d) => d[x] * 1.15), // Increase distance to reduce overlap
+                y: cor.map((d) => d[y] * 1.15), // Increase distance to reduce overlap
                 text: variableNames || cor.map((_, i) => `Var ${i + 1}`),
                 mode: 'text',
                 type: 'scatter',
                 textposition: 'top center',
-                textfont: { color: '#FF8787', size: 14 }, // Soft coral for labels
+                textfont: { color: '#FF8787', size: 12 }, // Smaller font size to reduce overlap
                 showlegend: false,
               },
             ]}
             layout={{
               title: {
                 text: `C${x + 1} vs C${y + 1}`,
-                font: { color: '#1E293B', size: 16 }, // Dark slate for title
+                font: { color: '#1E293B', size: 16 },
               },
               xaxis: {
-                range: [-1.2, 1.2],
+                range: [-1.3, 1.3], // Slightly increase range to accommodate labels
                 title: { text: `C${x + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
                 zerolinewidth: 2,
-                zerolinecolor: '#1E293B', // Dark slate for zeroline
+                zerolinecolor: '#1E293B',
                 showgrid: true,
-                gridcolor: '#58DAC6', // Muted teal for grid
-                scaleanchor: 'y', // Enforce equal scaling
+                gridcolor: '#58DAC6',
+                scaleanchor: 'y',
                 tickfont: { color: '#1E293B' },
+                automargin: true,
               },
               yaxis: {
-                range: [-1.2, 1.2],
+                range: [-1.3, 1.3], // Slightly increase range to accommodate labels
                 title: { text: `C${y + 1}`, font: { color: '#1E293B' } },
                 zeroline: true,
                 zerolinewidth: 2,
-                zerolinecolor: '#1E293B', // Dark slate for zeroline
+                zerolinecolor: '#1E293B',
                 showgrid: true,
-                gridcolor: '#58DAC6', // Muted teal for grid
+                gridcolor: '#58DAC6',
                 tickfont: { color: '#1E293B' },
+                automargin: true,
               },
               shapes: [
                 // Draw unit circle to emphasize the correlation space
@@ -172,29 +177,37 @@ export function CorrelationCircle({ cor, variableNames }) {
                 // Draw horizontal and vertical axis lines
                 {
                   type: 'line',
-                  x0: -1.2,
-                  x1: 1.2,
+                  x0: -1.3,
+                  x1: 1.3,
                   y0: 0,
                   y1: 0,
-                  line: { color: '#1E293B', width: 2 }, // Dark slate for axis line
+                  line: { color: '#1E293B', width: 2 },
                 },
                 {
                   type: 'line',
                   x0: 0,
                   x1: 0,
-                  y0: -1.2,
-                  y1: 1.2,
-                  line: { color: '#1E293B', width: 2 }, // Dark slate for axis line
+                  y0: -1.3,
+                  y1: 1.3,
+                  line: { color: '#1E293B', width: 2 },
                 },
               ],
               showlegend: true,
-              paper_bgcolor: 'rgba(0,0,0,0)', // Transparent background
-              plot_bgcolor: 'rgba(0,0,0,0)', // Transparent plot background
-              font: { color: '#1E293B' }, // Dark slate for all text
+              legend: {
+                x: 1.05, // Move legend to the right of the plot
+                y: 1,
+                xanchor: 'left',
+                yanchor: 'top',
+                font: { color: '#1E293B', size: 12 },
+              },
+              paper_bgcolor: 'rgba(0,0,0,0)',
+              plot_bgcolor: 'rgba(0,0,0,0)',
+              font: { color: '#1E293B' },
               margin: { t: 50, b: 50, l: 50, r: 50 },
               hovermode: 'closest',
+              autosize: true,
             }}
-            style={{ width: '100%', height: '500px' }}
+            style={{ width: '100%', height: '450px' }} // Slightly increase height for better visibility
             config={{ responsive: true }}
           />
         </div>
