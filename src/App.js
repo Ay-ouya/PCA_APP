@@ -130,7 +130,7 @@ function App() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [pcaType, loading]); // Re-run when pcaType or loading changes to ensure DOM updates
+    }, [pcaType, loading]);
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -252,13 +252,19 @@ function App() {
             const response = await axios.post('https://youyaa.pythonanywhere.com/run-pca', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
-            console.log("Response from backend:", response.data);
+            console.log("Full response data:", JSON.stringify(response.data, null, 2));
 
             if (pcaType === 'Normed_PCA') {
-                setResult(response.data);
+                setResult({
+                    ...response.data,
+                    principal_eigen_values: response.data.explained_variance || [], // Map explained_variance to principal_eigen_values
+                });
                 setResult2({});
             } else if (pcaType === 'Non_normed_PCA_homogeneous' || pcaType === 'Non_normed_PCA_heterogeneous') {
-                setResult2(response.data);
+                setResult2({
+                    ...response.data,
+                    principal_eigen_values: response.data.explained_variance || [], // Map explained_variance to principal_eigen_values
+                });
                 setResult({});
             }
         } catch (error) {
@@ -564,17 +570,15 @@ function App() {
                                                     }}
                                                 />
                                             )}
-                                            {Array.isArray(result.cumulative_variance) && result.cumulative_variance.length > 0 && (
+                                            {Array.isArray(result.principal_eigen_values) && result.principal_eigen_values.length > 0 && (
                                                 <div style={{ fontFamily: 'Times New Roman' }}>
                                                     {` There ${result.n_component > 1 ? 'are' : 'is'} ${result.n_component} principal axe${result.n_component > 1 ? 's' : ''} relative to `}
                                                     <span
                                                         dangerouslySetInnerHTML={{
                                                             __html: katex.renderToString(
-                                                                Array.isArray(result.principal_eigen_values) && result.principal_eigen_values.length > 0
-                                                                    ? result.principal_eigen_values
-                                                                        .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                                        .join(', ')
-                                                                    : 'No principal eigenvalues available',
+                                                                result.principal_eigen_values
+                                                                    .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                    .join(', '),
                                                                 { throwOnError: false, displayMode: false }
                                                             ),
                                                         }}
@@ -674,17 +678,15 @@ function App() {
                                                     ),
                                                 }}
                                             />
-                                            {Array.isArray(result2.cumulative_variance) && result2.cumulative_variance.length > 0 && (
+                                            {Array.isArray(result2.principal_eigen_values) && result2.principal_eigen_values.length > 0 && (
                                                 <div style={{ fontFamily: 'Times New Roman' }}>
                                                     {` So there ${result2.n_component > 1 ? 'are' : 'is'} ${result2.n_component} principal axe${result2.n_component > 1 ? 's' : ''} relative to `}
                                                     <span
                                                         dangerouslySetInnerHTML={{
                                                             __html: katex.renderToString(
-                                                                Array.isArray(result2.principal_eigen_values) && result2.principal_eigen_values.length > 0
-                                                                    ? result2.principal_eigen_values
-                                                                        .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
-                                                                        .join(', ')
-                                                                    : 'No principal eigenvalues available',
+                                                                result2.principal_eigen_values
+                                                                    .map((value, index) => `\\lambda_${index + 1} = ${(typeof value === 'number' ? value.toFixed(2) : value)}`)
+                                                                    .join(', '),
                                                                 { throwOnError: false, displayMode: false }
                                                             ),
                                                         }}
