@@ -437,19 +437,11 @@ function App() {
                             <table>
                                 <thead>
                                     <tr>
-                                        <th className='tb-cont'>Individuals \ Variables</th>
+                                        <th className='tb-cont'>Ind \ Var</th>
                                         {Array.from({ length: numVariables }, (_, j) => (
-                                             <th key={j}>
-                                            <Form.Control
-                                                type="text"
-                                                placeholder={`Variable ${j + 1}`}
-                                                onChange={(e) => {
-                                                    const newVariableNames = [...manualData.variable_names];
-                                                    newVariableNames[j] = e.target.value;
-                                                    setManualData({ ...manualData, variable_names: newVariableNames });
-                                                }}
-                                            />
-                                        </th>
+                                            <th key={j}>
+                                                {manualData.variable_names[j] || `V${j + 1}`}
+                                            </th>
                                         ))}
                                     </tr>
                                 </thead>
@@ -457,28 +449,21 @@ function App() {
                                     {Array.from({ length: numIndividuals }, (_, i) => (
                                         <tr key={i}>
                                             <td>
-                                                <Form.Control
-                                                type="text"
-                                                placeholder={`Individual ${i + 1}`}
-                                                onChange={(e) => {
-                                                    const newNames = [...manualData.individue_names];
-                                                    newNames[i] = e.target.value;
-                                                    setManualData({ ...manualData, individue_names: newNames });
-                                                }}
-                                              />
+                                                {manualData.individue_names[i] || `I${i + 1}`}
                                             </td>
                                             {Array.from({ length: numVariables }, (_, j) => (
                                                 <td key={j} className='input-numbers'>
-                                                   <Form.Control
-                                                    type="number"
-                                                    placeholder={`Value for ${manualData.variable_names[j] || `Variable ${j + 1}`}`}
-                                                    onChange={(e) => {
-                                                        const newData = [...manualData.data];
-                                                        if (!newData[i]) newData[i] = [];
-                                                        newData[i][j] = parseFloat(e.target.value);
-                                                        setManualData({ ...manualData, data: newData });
-                                                    }}
-                                                     />
+                                                    <Form.Control
+                                                        type="number"
+                                                        value={manualData.data[i]?.[j] || ''}
+                                                        placeholder={`${manualData.variable_names[j] || `Var ${j + 1},${i + 1}`}`}
+                                                        onChange={(e) => {
+                                                            const newData = manualData.data.map((row) => [...row]);
+                                                            if (!newData[i]) newData[i] = [];
+                                                            newData[i][j] = e.target.value === '' ? '' : parseFloat(e.target.value);
+                                                            setManualData({ ...manualData, data: newData });
+                                                        }}
+                                                    />
                                                 </td>
                                             ))}
                                         </tr>
