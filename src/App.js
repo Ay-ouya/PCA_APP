@@ -317,7 +317,11 @@ function App() {
     return (
         <Container className="App">
             <header className="App-header">
-                <h1>Principal Component Analysis <img src="/pca.png" alt="pca logo" /></h1>
+        <div classname="app-title-logo"> 
+                <h1>Principal Component Analysis</h1>
+                <img src="/pca.png" alt="pca logo" />
+        </div>
+        
                 <Form.Group className="pca-type">
                     <div className='type-select'>
                         <Form.Label className='title'>Select PCA Type :</Form.Label>
