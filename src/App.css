@@ -48,8 +48,8 @@ h1 {
 }
 
 img {
-  width: 130px; 
-  height: 250px; 
+  width: 250px; 
+  height: 130px; 
   object-fit: contain; 
   vertical-align: middle; 
 }
