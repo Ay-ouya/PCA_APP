@@ -439,7 +439,8 @@ function App() {
                                     <tr>
                                         <th className='tb-cont'>Individuals \ Variables</th>
                                         {Array.from({ length: numVariables }, (_, j) => (
-                                             <Form.Control
+                                             <th key={j}>
+                                            <Form.Control
                                                 type="text"
                                                 placeholder={`Variable ${j + 1}`}
                                                 onChange={(e) => {
@@ -447,8 +448,8 @@ function App() {
                                                     newVariableNames[j] = e.target.value;
                                                     setManualData({ ...manualData, variable_names: newVariableNames });
                                                 }}
-                                               />
-                                            </th>
+                                            />
+                                        </th>
                                         ))}
                                     </tr>
                                 </thead>
