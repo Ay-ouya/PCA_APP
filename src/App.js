@@ -442,84 +442,82 @@ function App() {
                             <Form.Control className='url' type="text" placeholder="Enter dataset URL" onChange={handleUrlChange} />
                         </Form.Group>
                     )}
-                   {dataSource === 'manual' && (
-    <Form.Group className="insert">
-        <Form.Label className="title">Number of Individuals</Form.Label>
-        <Form.Control
-            type="number"
-            value={numIndividuals}
-            onChange={(e) => setNumIndividuals(Math.max(0, parseInt(e.target.value) || 0))}
-            min="0"
-        />
-        <Form.Label className="title">Number of Variables</Form.Label>
-        <Form.Control
-            type="number"
-            value={numVariables}
-            onChange={(e) => setNumVariables(Math.max(0, parseInt(e.target.value) || 0))}
-            min="0"
-        />
-    </Form.Group>
-)}
-{dataSource === 'manual' && numIndividuals > 0 && numVariables > 0 && (
-    <Form.Group className="initial-table">
-        <table>
-            <thead>
-                <tr>
-                    <th className="tb-cont">Ind \ Var</th>
-                    {Array.from({ length: numVariables }, (_, j) => (
-                        <th key={j}>
+                  {dataSource === 'manual' && (
+                        <Form.Group className="insert">
+                            <Form.Label className='title'>Number of Individuals</Form.Label>
                             <Form.Control
-                                type="text"
-                                value={manualData.variable_names[j] || ''}
-                                placeholder={`Var ${j + 1}`}
-                                onChange={(e) => {
-                                    const newVariableNames = [...manualData.variable_names];
-                                    newVariableNames[j] = e.target.value;
-                                    setManualData({ ...manualData, variable_names: newVariableNames });
-                                }}
-                                className="name-input"
+                                type="number"
+                                value={numIndividuals}
+                                onChange={(e) => setNumIndividuals(parseInt(e.target.value))}
                             />
-                        </th>
-                    ))}
-                </tr>
-            </thead>
-            <tbody>
-                {Array.from({ length: numIndividuals }, (_, i) => (
-                    <tr key={i}>
-                        <td>
+                            <Form.Label className='title'>Number of Variables</Form.Label>
                             <Form.Control
-                                type="text"
-                                value={manualData.individue_names[i] || ''}
-                                placeholder={`Ind ${i + 1}`}
-                                onChange={(e) => {
-                                    const newIndividueNames = [...manualData.individue_names];
-                                    newIndividueNames[i] = e.target.value;
-                                    setManualData({ ...manualData, individue_names: newIndividueNames });
-                                }}
-                                className="name-input"
+                                type="number"
+                                value={numVariables}
+                                onChange={(e) => setNumVariables(parseInt(e.target.value))}
                             />
-                        </td>
-                        {Array.from({ length: numVariables }, (_, j) => (
-                            <td key={j} className="input-numbers">
-                                <Form.Control
-                                    type="number"
-                                    value={manualData.data[i]?.[j] || ''}
-                                    placeholder={`${manualData.variable_names[j] || `Var ${j + 1}`}, ${manualData.individue_names[i] || `Ind ${i + 1}`}`}
-                                    onChange={(e) => {
-                                        const newData = [...manualData.data];
-                                        if (!newData[i]) newData[i] = Array(numVariables).fill('');
-                                        newData[i][j] = e.target.value === '' ? '' : parseFloat(e.target.value);
-                                        setManualData({ ...manualData, data: newData });
-                                    }}
-                                />
-                            </td>
-                        ))}
-                    </tr>
-                ))}
-            </tbody>
-        </table>
-    </Form.Group>
-)}
+                        </Form.Group>
+                    )}
+                    {dataSource === 'manual' && numIndividuals > 0 && numVariables > 0 && (
+                        <Form.Group className="initial-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th className="tb-cont">Ind \ Var</th>
+                                        {Array.from({ length: numVariables }, (_, j) => (
+                                            <th key={j}>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={manualData.variable_names[j] || ''}
+                                                    placeholder={`Var ${j + 1}`}
+                                                    onChange={(e) => {
+                                                        const newVariableNames = [...manualData.variable_names];
+                                                        newVariableNames[j] = e.target.value;
+                                                        setManualData({ ...manualData, variable_names: newVariableNames });
+                                                    }}
+                                                    className="name-input"
+                                                />
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {Array.from({ length: numIndividuals }, (_, i) => (
+                                        <tr key={i}>
+                                            <td>
+                                                <Form.Control
+                                                    type="text"
+                                                    value={manualData.individue_names[i] || ''}
+                                                    placeholder={`Ind ${i + 1}`}
+                                                    onChange={(e) => {
+                                                        const newIndividueNames = [...manualData.individue_names];
+                                                        newIndividueNames[i] = e.target.value;
+                                                        setManualData({ ...manualData, individue_names: newIndividueNames });
+                                                    }}
+                                                    className="name-input"
+                                                />
+                                            </td>
+                                            {Array.from({ length: numVariables }, (_, j) => (
+                                                <td key={j} className="input-numbers">
+                                                    <Form.Control
+                                                        type="number"
+                                                        value={manualData.data[i]?.[j] || ''}
+                                                        placeholder={`${manualData.variable_names[j] || `Var ${j + 1}`}, ${manualData.individue_names[i] || `Ind ${i + 1}`}`}
+                                                        onChange={(e) => {
+                                                            const newData = [...manualData.data];
+                                                            if (!newData[i]) newData[i] = Array(numVariables).fill('');
+                                                            newData[i][j] = e.target.value === '' ? '' : parseFloat(e.target.value);
+                                                            setManualData({ ...manualData, data: newData });
+                                                        }}
+                                                    />
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </Form.Group>
+                    )}
                     <div className="run-button-container">
                         <Button className="run-button" type="submit">
                             Run PCA
