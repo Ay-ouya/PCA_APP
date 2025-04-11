@@ -508,7 +508,7 @@ function App() {
                                     onChange={(e) => {
                                         const newData = [...manualData.data];
                                         if (!newData[i]) newData[i] = Array(numVariables).fill('');
-                                        newData[i][j] = e.target.value;
+                                        newData[i][j] = e.target.value === '' ? '' : parseFloat(e.target.value);
                                         setManualData({ ...manualData, data: newData });
                                     }}
                                 />
