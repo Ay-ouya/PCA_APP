@@ -1,12 +1,12 @@
 :root {
-  --primary-color: #60A5FA; 
-  --other-primary-color: #E0F2FE; 
+  --primary-color: #003575; 
+  --other-primary-color: #cdd7e3; 
   --darker-primary-color: #FFFFFF; 
-  --main-text-color: #1E293B;
-  --secondary-color: #FF8787; 
-  --secondary-lighter-color: #FFF1F1; 
-  --hover-color: #F87171; 
-  --accent-color: #58dac6; 
+  --main-text-color: #2b3a45;
+  --secondary-color: #1b5483; 
+  --secondary-lighter-color: #c6e5ff; 
+  --hover-color: #c4ede9; 
+  --accent-color: #58dac7; 
   --border-radius: 8px;
   --transition-speed: 0.3s;
 }
@@ -39,7 +39,6 @@ h1 {
   margin: 0;
   padding: 10px 0;
   text-align: center;
-  color: #4ed0ff;
   text-shadow: 1px 2px 2px rgba(96, 165, 250, 0.2);
   display: flex; 
   align-items: center; 
