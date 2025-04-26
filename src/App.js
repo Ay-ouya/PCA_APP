@@ -558,7 +558,7 @@ function App() {
                                 <div className='Steps-normed-pca'>
                                     <div className='normal-std'>
                                         <h3>
-                                            1. Normalization and Standardization :{' '}
+                                            1. Centralization and Reduction, :{' '}
                                             <span className='math' ref={el => (equationRefs.current['equation1'] = el)} />
                                         </h3>
                                         {renderMatrix(result.Standerdize_Reduced_matrix, 'Z')}
@@ -669,7 +669,7 @@ function App() {
                                 <div className='Steps-non-normed-pca'>
                                     <div className='normal-std'>
                                         <h3>
-                                            1. Normalization :{' '}
+                                            1. Centralization , :{' '}
                                             <span className='math' ref={el => (equationRefs.current['equation_1'] = el)} />
                                         </h3>
                                         {renderMatrix(result2.Centered_Matrix, 'X')}
